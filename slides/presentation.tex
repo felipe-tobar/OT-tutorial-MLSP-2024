@@ -11,7 +11,7 @@
 \author[]{Felipe Tobar\inst{1} \and Laetitia Chapel\inst{2}}
 \institute[]{\inst{1} Initiative for Data \& Artificial Intelligence, Univeridad de Chile \and \inst{2} IRISA, Obelix team, Institut Agro Rennes-Angers}
 
-\date{22 September, 2024}  
+\date{22 September, 2024} 
 
 
 \begin{document}
@@ -138,8 +138,9 @@ De l'Imprimerie Royale.}}
 
 
 
-\begin{frame}{\bred{Example:} Colour transfer}
+\begin{frame}{\bred{Example 1:} Colour transfer}
 \begin{minipage}{0.49\textwidth}
+\vspace{1em}
 \bblue{Original images}
     \begin{figure}
         \includegraphics[width=0.9\textwidth]{../img/ex1_original_images.pdf}
@@ -159,41 +160,49 @@ De l'Imprimerie Royale.}}
     \end{figure}
 \end{minipage}
 
-\begin{textblock}{0.45}(0.55,0.52)
-\tiny
-$\bullet$ Ferradans, S., Papadakis, N., Peyre, G., \& Aujol, J. F. (2014). Regularized discrete optimal transport. SIAM Journal on Imaging Sciences, 7(3), 1853-1882.\\
-
-$\bullet $Code adapted from POT documentation
+\begin{textblock}{0.45}(0.56,0.54)
+\small
+\bred{
+\underline{
+    Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Colour_transfer.ipynb}{Colour\_transfer.ipynb}
+}}
 \end{textblock}
 \end{frame}
 
-\begin{frame}{Example of domain adaptation}
-Let us consider the following source and target classification problems
-        \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../img/DA_original_samples.pdf}
+
+\begin{frame}{\bred{Example 2:} Domain adaptation}
+
+\begin{minipage}{0.49\textwidth}
+\vspace{1em}
+\bblue{Original images}
+    \begin{figure}
+        \includegraphics[width=0.78\textwidth]{../img/DA_original_samples.pdf}
     \end{figure}
-\end{frame}
-
-\begin{frame}{Example of domain adaptation}
-Let us consider the following source and target classification problems
-        \begin{figure}
-        \includegraphics[width=0.8\textwidth]{../img/DA_coupling.pdf}
+\vspace{-0.5em}
+\bblue{Histograms}
+    \begin{figure}
+        \includegraphics[width=0.85\textwidth]{../img/DA_coupling.pdf}
     \end{figure}
-\end{frame}
-
-\begin{frame}{Example of domain adaptation}
-Let us consider the following source and target classification problems
-        \begin{figure}
-        \includegraphics[width=0.6\textwidth]{../img/DA_samples.pdf}
+    
+\end{minipage}
+\hfill
+\begin{minipage}{0.49\textwidth}
+\bblue{Histograms}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../img/DA_samples.pdf}
     \end{figure}
+\end{minipage}
+
+\begin{textblock}{0.45}(0.56,0.54)
+\small
+\bred{
+\underline{
+    Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Domain_adaptation.ipynb}{Domain\_adaptation.ipynb}
+}}
+\end{textblock}
 \end{frame}
 
 
-
-
-\begin{frame}{Observation}
-Not all problems feature \emph{atoms}, sometimes we have weighted samples
-\end{frame}
 
 
 
@@ -201,6 +210,8 @@ Not all problems feature \emph{atoms}, sometimes we have weighted samples
         \begin{figure}
         \includegraphics[width=0.7\textwidth]{../img/existence_uniqueness.pdf}
     \end{figure}
+    \vspace{1em}
+\bred{Observation:} In the above examples, each sample \emph{weighted the same}, i.e., pixels, class instances. In some cases, we might have \emph{weighted samples}.
 \end{frame}
 
 
@@ -230,37 +241,59 @@ where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in [0,1]^{m\times n} :  \sum_{
 
 
 
-\begin{frame}{Example:}
-    Consider the following source and target distributions
-         \begin{figure}
-        \includegraphics<1-2>[width=0.23\textwidth]{../img/kantorovich_discrete_histogram.pdf}\hspace{2em}
-        \includegraphics<2>[width=0.45\textwidth]{../img/kantorovich_discrete_solution.pdf}
+\begin{frame}{\bred{Example 3:} Discrete Kantorovich plan}
+    Let consider the following source and target distributions
+
+\begin{minipage}{0.49\textwidth}
+\begin{figure}
+        \includegraphics[width=0.48\textwidth]{../img/kantorovich_discrete_histogram.pdf}\hspace{2em}
     \end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.49\textwidth}
+\begin{figure}
+        \includegraphics[width=0.8\textwidth]{../img/kantorovich_discrete_solution.pdf}\hspace{2em}
+    \end{figure}
+\end{minipage}
+
+\begin{textblock}{0.45}(0.62,0.54)
+\small
+\bred{
+\underline{
+    Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/kantorovich.ipynb}{kantorovich.ipynb}
+}}
+\end{textblock}
 \end{frame}
 
 
-\begin{frame}{Example (Continuous)}
+
+
+\begin{frame}{\bred{Example 4:} Continuous Kantorovich plan}
     Let us now consider two  distributions over a continuous support
-         \begin{figure}
-        \includegraphics[width=0.8\textwidth]{../img/kantorovich_continuous_density.pdf}\hspace{2em}
+\begin{minipage}{0.59\textwidth}
+\begin{figure}
+    \centering
+        \includegraphics[width=0.9\textwidth]{../img/kantorovich_continuous_density.pdf}\hspace{2em}
     \end{figure}
-\end{frame}
-
-
-\begin{frame}{Example (Continuous)}
-    Let us now consider two  distributions over a continuous support
-    \begin{minipage}{0.6\textwidth}
-        \begin{figure}
-            \includegraphics[width=0.8\textwidth]{../img/kantorovich_continuous_solution.pdf}
-        \end{figure}
-    \end{minipage}
-    \hspace{0.25em}
-    \begin{minipage}{0.36\textwidth}
-        \bred{Observe that the plan remained \emph{sparse}, i.e., the mass did not spread  much}
+            \bblue{Observe that the plan remained \emph{sparse}, i.e., the mass did not spread  much}
 
         This motivates the following results
-    \end{minipage}
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\textwidth}
+\begin{figure}
+    \centering
+        \includegraphics[width=0.9\textwidth]{../img/kantorovich_continuous_solution.pdf}
+    \end{figure}
+    \centering
+    \small
+\bred{
+\underline{
+    Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/kantorovich.ipynb}{kantorovich.ipynb}
+}}
+\end{minipage}
 \end{frame}
+
 
 \begin{frame}{Observations}
     \begin{itemize}
@@ -275,17 +308,13 @@ where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in [0,1]^{m\times n} :  \sum_{
 
 
 
-\begin{frame}{Example: Domain adaptation}
-    Cite some papers and hopefully show some simulations
-\end{frame}
-
 
 \begin{frame}{Dual formulation}
     Formualtion and illustration with the factories
 \end{frame}
 
-\begin{frame}{Examples}
-    See which ones make sense here:  Domain Adaptation,  OT for fairness,  Colour-transfer, WGANs.
+\begin{frame}{\bred{Example 5:} Wasserstein GANs}
+diagrams, figures and hopefully code
 \end{frame}
 
 
