@@ -1,0 +1,307 @@
+\usetheme{%
+%Berlin%
+%Antibes%
+%Boadilla%
+%Copenhagen%
+%Darmstadt%
+%Frankfurt%
+%Ilmenau%
+%JuanLesPins%
+%Madrid%
+%Warsaw%
+%Marburg%
+%Boadilla%
+simple%
+}
+
+
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{4 on 1}[a4paper,border shrink=5mm]
+%\usepackage{scalefnt}
+%\usepackage[version=4]{mhchem}
+%\newcommand{\bftab}{\fontseries{b}\selectfont}
+\usepackage{multirow}
+\newcommand{\rot}[1]{\multirow{9}{*}{\rotatebox[origin=c]{90}{#1}}}
+%\mode<presentation>
+
+
+%\usecolortheme[RGB={15,90,0}]{structure}
+%\usecolortheme[RGB={20,100,0}]{structure}
+%\usecolortheme[RGB={10,80,0}]{structure}
+
+\useinnertheme{circles}
+%\useoutertheme{miniframes}
+%\useoutertheme{shadow}
+%\useoutertheme[subsection=false]{smoothbars}
+%\useoutertheme{infolines}
+
+% \usepackage[brazil]{babel}
+%\usepackage[T1]{fontenc}
+%\usepackage{ae} 
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+
+
+\usepackage{media9}      
+
+\usepackage[onecol]{hackthefootline}
+%\htfconfig{title=short, framenrs=counter, atsep=space}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphics}
+\usepackage{graphicx}
+%\usepackage[caption=false]{subfig}
+\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage{array} %for vertical thick lines in tables
+\usepackage{multirow} %multirow tables
+\usepackage{nicefrac} %for fractions like 1/4
+\usepackage{booktabs}
+\usepackage{multicol}
+\usepackage{amssymb}
+\usepackage{amsmath} 
+\usepackage[makeroom]{cancel}
+\usepackage{bm}
+\usepackage[group-separator={,},separate-uncertainty]{siunitx}
+\usepackage{xcolor}
+\usepackage[export]{adjustbox}
+
+%\usefonttheme[onlymath]{serif}
+%\usepackage{lmodern}
+\usepackage{makecell}
+%% Commande TikZ
+\usepackage{tikz}
+\usepackage{tikz,pgf,tikz-3dplot}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage[beamer]{hf-tikz}
+\usetikzlibrary{bayesnet,shapes,arrows,positioning}
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzset{
+	%Define standard arrow tip
+	>=stealth',
+	%Define style for boxes
+	punkt/.style={
+		rectangle,
+		rounded corners,
+		draw=black, very thick,
+		text width=6.5em,
+		minimum height=2em,
+		text centered},
+	% Define arrow style
+	pil/.style={
+		->,
+		thick,
+		shorten <=2pt,
+		shorten >=2pt,}
+}
+
+
+\tikzstyle{rempliRed}=[red!30, fill=red!30]
+\tikzstyle{ecritRed}=[red!60, fill=red!60]
+\tikzstyle{rempliBlue}=[blue!30, fill=blue!30]
+\tikzstyle{ecritBlue}=[blue!60, fill=blue!60]
+
+\definecolor{color1}{rgb}{0.25, 0, 0.75}
+\definecolor{color2}{rgb}{0.5, 0, 0.5}
+\definecolor{color3}{rgb}{0.75, 0, 0.25}
+
+\pgfplotsset{
+    dirac/.style={
+        mark=triangle*,
+        mark options={scale=2},
+        ycomb,
+        scatter,
+        visualization depends on={y/abs(y)-1 \as \sign},
+        scatter/@pre marker code/.code={\scope[rotate=90*\sign,yshift=-2pt]}
+    }
+}
+
+\def\mathunderline#1#2{\color{#1}\underline{{\color{black}#2}}\color{black}}
+
+\DeclareMathOperator{\Tr}{\mathrm{Tr}}
+\DeclareMathOperator{\KL}{\mathrm{KL}}
+\usepackage{dsfont}
+
+
+%Felipe's packages
+
+
+% Definitions
+\newcommand*{\defeq}{\stackrel{\text{def}}{=}}
+\newcommand{\tr}[1]{\operatorname{tr}\left(#1\right)}
+
+\newcommand{\MOGP}{\ensuremath{\mathcal{MOGP}}}
+\renewcommand{\L}{{\mathbb L}}
+\def\data{\text{data}}
+\def\sn{\sigma_{\text{noise}}}
+\def\eye{\mathbf{I}}
+\def\cN{{\mathcal{N}}}
+\def\cX{{\mathcal{X}}}
+\def\cY{{\mathcal{Y}}}
+\def\dxi{{\text d} \xi}
+\def\N{{\mathbb{N}}}
+\def\m{{\mathbf{m}}}
+\def\NLL{{\text{NLL}}}
+\newcommand{\eps}{\varepsilon}
+\def\R{{\mathbb{R}}}
+\def\MVN{{\text{MVN}}}
+\def\GP{{\mathcal {GP}}}
+\def\y{{\mathbf{y}}}
+\def\t{{\mathbf{t}}}
+\def\x{{\mathbf{x}}}
+\def\xizi{ \xi_0^{(i)} }
+\def\u{{\mathbf{u}}}
+\def\z{{\mathbf{z}}}
+\def\X{{\mathbf{X}}}
+\def\K{{\mathbf{K}}}
+\def\dtau{{\text d\tau}}
+\def\td{{\text d}}
+\newcommand{\id}{\text{id}}
+
+
+\newcommand{\fourier}[1]{\mathcal{F} \left\{#1\right\}}
+\newcommand{\WF}[2]{\operatorname{WF}\left([#1],[#2]\right)}
+
+\newcommand{\afourier}[1]{\mathcal{F}^{-1} \left\{#1\right\}}
+\newcommand{\srp}[4]{\operatorname{simrect}_{#1,#2,#3}\left(#4\right)}
+\newcommand{\rect}[1]{\text{rect}\left(#1\right)}
+\def\sinc{ \operatorname{sinc} }
+\newcommand{\SK}[1]{\operatorname{SK}\left(#1\right)}
+\newcommand{\V}[2]{\mathbb{V}\left[#1,#2\right]}
+\newcommand\eqdef{\overset{\mathrm{def}}{=}}
+\newcommand{\GSK}[1]{\operatorname{GSK}\left(#1\right)}
+\newcommand{\GSKN}[1]{\operatorname{GSK}_N\left(#1\right)}
+\DeclareMathOperator\supp{supp}
+\DeclareMathOperator{\argmin}{argmin}
+%colours
+\definecolor{navy}{HTML}{000080}
+\providecommand{\rbullet}{{\textcolor{red}{{\bf \bullet}}}}
+\providecommand{\bbullet}{{\textcolor{navy}{{\bf \bullet}}}}
+\definecolor{clay}{RGB}{190,22,34}%
+\providecommand{\bred}[1]{\textcolor{clay}{{\bf#1}}}
+\providecommand{\bgreen}[1]{\textcolor{green}{{\bf#1}}}
+\providecommand{\bteal}[1]{\textcolor{teal}{{\bf#1}}}
+\providecommand{\bblue}[1]{\textcolor{navy}{{\bf#1}}}
+\providecommand{\red}[1]{\textcolor{clay}{#1}}
+\providecommand{\blue}[1]{\textcolor{navy}{#1}}
+\providecommand{\bbullet}{{\textcolor{navy}{{\bf \bullet}}}}
+
+
+
+
+%% Commande TikZ
+\tikzstyle{rempliRed}=[red!30, fill=red!30]
+\tikzstyle{ecritRed}=[red!60, fill=red!60]
+\tikzstyle{rempliBlue}=[blue!30, fill=blue!30]
+\tikzstyle{ecritBlue}=[blue!60, fill=blue!60]
+
+\newcommand{\er}[1]{{\color{red!60} #1}}
+\newcommand{\eb}[1]{{\color{blue!60} #1}}
+
+
+% Commandes
+\newcommand{\bigslant}[2]{{\raisebox{.2em}{$#1$}\left/\raisebox{-.2em}{$#2$}\right.}} 
+\newcommand{\Z}{{\mathbb Z}}
+\renewcommand{\P}{{\mathbb P}}
+\newcommand{\G}{{\mathbb G}}
+\renewcommand{\L}{{\mathbb L}}
+\newcommand{\T}{{\mathbb T}}
+\newcommand{\Q}{{\mathbb Q}}
+
+
+\newcommand{\PP}{{\mathcal P}}
+\newcommand{\HH}{{\mathcal H}}
+\newcommand{\DD}{{\mathcal D}}
+\newcommand{\BB}{{\mathcal B}}
+\newcommand{\MM}{{\mathcal M}}
+\newcommand{\XX}{{\mathcal X}}
+\newcommand{\YY}{{\mathcal Y}}
+\newcommand{\NN}{{\mathcal N}}
+\newcommand{\LL}{{\mathcal L}}
+\newcommand{\1}{{\mathds 1}}
+
+\newcommand{\bX}{\boldsymbol{X}}
+\newcommand{\bY}{\boldsymbol{Y}}
+\newcommand{\bnu}{\boldsymbol{\nu}}
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\boldeta}{\boldsymbol{\eta}}
+\newcommand{\bsigma}{\boldsymbol{\sigma}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\bfun}{\boldsymbol{f}}
+\newcommand{\bGamma}{\boldsymbol{\Gamma}}
+\newcommand{\br}{\boldsymbol{r}}
+\newcommand{\bq}{\boldsymbol{q}}
+\newcommand{\bG}{\boldsymbol{G}}
+\newcommand{\tH}{\tilde{H}}
+\newcommand{\tg}{\tilde{g}}
+\newcommand{\tS}{\tilde{\Sigma}}
+\def\d{{\text d}}
+\def\ba{ \boldsymbol{a} }
+\def\bb{ \boldsymbol{b} }
+\def\bx{ \boldsymbol{x} }
+\def\by{ \boldsymbol{y} }
+
+
+
+
+\newcommand{\CB}[1]{{\color{blue} #1}}
+\newcommand{\CR}[1]{{\color{red} #1}}
+\newcommand{\CV}[1]{{\color{green} #1}}
+\newcommand{\CVI}[1]{{\color{violet} #1}}
+\newcommand{\CP}[1]{{\color{purple} #1}}
+\newcommand{\CO}[1]{{\color{orange} #1}}
+\newcommand{\CM}[1]{{\color{magenta} #1}}
+\newtheorem{proposition}{Proposition}  
+\newtheorem{remark}{Remark}  
+
+
+
+%imports
+\usepackage[export]{adjustbox}
+\usepackage[absolute,overlay]{textpos}
+\setlength{\TPHorizModule}{\textwidth}
+\setlength{\TPVertModule}{\textwidth}
+\usepackage{soul}
+
+% Pausing in the align environment
+\makeatletter
+\let\save@measuring@true\measuring@true
+\def\measuring@true{%
+  \save@measuring@true
+  \def\beamer@sortzero##1{\beamer@ifnextcharospec{\beamer@sortzeroread{##1}}{}}%
+  \def\beamer@sortzeroread##1<##2>{}%
+  \def\beamer@finalnospec{}%
+}
+\makeatother
+
+%listing package para código
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+	xleftmargin=0.05\textwidth,
+	linewidth=0.95\textwidth,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\scriptsize,
+    breakatwhitespace=true,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}

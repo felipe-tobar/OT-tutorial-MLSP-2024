@@ -1,0 +1,87 @@
+\usetikzlibrary{shapes.geometric,calc}
+
+\newcommand\blobA[3][]%
+{\draw[draw=black, fill=red!20] (#3) coordinate (#2-1)
+     to [out=-90,in=-180] ++(0.5,-0.2) coordinate (#2-2)
+     to [out=0,in=-180] ++(1.0,0.1) coordinate (#2-3)
+     to [out=0,in=-180] ++(0.3,-0.1) coordinate (#2-4)
+     to [out=0,in=-90] ++(0.2,0.2) coordinate (#2-5)
+     to [out=90,in=-45] ++(-0.1,0.4)  coordinate (#2-6)
+     to [out=135,in=-45] ++(-0.2,0.3)  coordinate (#2-7)
+     to [out=135,in=0] ++(-0.2,0.2)  coordinate (#2-8)
+     to [out=180,in=0] ++(-0.2,0.4)  coordinate (#2-9)
+     to [out=180,in=45] ++(-0.2,-0.1)  coordinate (#2-10)
+     to [out=-135,in=0] ++(-0.2,-0.1)  coordinate (#2-11)%	
+     to [out=-180,in=45] ++(-0.3,-0.1)  coordinate (#2-12)
+     to [out=-135,in=45]++(-0.3,0)  coordinate (#2-13)
+     to [out=-135,in=90] (#2-1);
+     \fill[draw=black, fill = red!30] (#2-1)	
+   	to [out=-90,in=-180] ++(0.5,-0.2)
+     to [out=0,in=-180] ++(1.0,0.1)
+     to [out=0,in=-180] ++(0.3,-0.1)
+     to [out=0,in=-90] ++(0.2,0.2) coordinate (#2-5);
+  \fill[#1, color = red!30] (#2-5)
+     to [out=90,in=0] ++(-1,0.3)  coordinate (#2-14)
+     to [out=180,in=90] (#2-1);
+   \draw[#1] (#2-5)
+    to [out=90,in=0] ++(-1,0.3)  coordinate (#2-14)
+    to [out=180,in=90] (#2-1);
+	
+	\draw[draw=black, fill=red!50] ++(1,0.1)  coordinate (#2-20)
+    to [out=-90,in=180] ++(0.26,-0.13)  coordinate (#2-21)
+    to [out=0,in=90]  (#2-20);  
+    	\draw[draw=black, fill=red!50] ++(1,0.7)  coordinate (#2-22)
+    to [out=-90,in=180] ++(0.26,0)  coordinate (#2-23)
+    to [out=0,in=-90] ++(-0.1,0.2)  coordinate (#2-24)
+     to [out=90,in=-45] ++(-0.1,0.1)  coordinate (#2-25)
+	to [out=135,in=90]  (#2-22);
+	\fill[color = red, opacity = 0.2] (#2-21)
+	to [out=0,in=90]  (#2-20)
+	to [out=90,in=90]  (#2-22)
+	to [out=-90,in=180]	(#2-23)
+	to [out=-90,in=90]  (#2-21);
+  }
+\newcommand\blobB[3][]%
+  {\draw[draw=black, fill=blue!20]  (#3) coordinate (#2-1)
+ 	to [out=-90,in=-180] ++(0.4,-0.2) coordinate (#2-2)
+     to [out=0,in=-180] ++(0.5,0.1) coordinate (#2-3)
+     to [out=0,in=-180] ++(0.4,-0.1) coordinate (#2-4)
+     to [out=0,in=-90] ++(0.8,0.1) coordinate (#2-5)
+     to [out=90,in=-25] ++(-0.2,0.6)  coordinate (#2-8)
+     to [out=155,in=20] ++(-0.2,0.2)  coordinate (#2-9)
+     to [out=-160,in=0] ++(-0.2,0.3)  coordinate (#2-11)
+     to [out=-180,in=30] ++(-0.5,-0.1)  coordinate (#2-12)
+     to [out=-150,in=0] ++(-0.3,0.2)  coordinate (#2-12)
+     to [out=-180,in=90] (#2-1);
+   \fill[draw = black, fill = blue!30] (#2-1)
+	to [out=-90,in=-180] ++(0.4,-0.2) coordinate (#2-2)
+     to [out=0,in=-180] ++(0.5,0.1) coordinate (#2-3)
+     to [out=0,in=-180] ++(0.4,-0.1) coordinate (#2-4)
+     to [out=0,in=-90] ++(0.8,0.1) coordinate (#2-5);
+     \fill[color = blue!30] (#2-5)
+     to [out=90,in=0] ++(-0.2,0.1)  coordinate (#2-14)
+     to [out=-180,in=15] ++(-1.2,0.2)  coordinate (#2-15)
+     to [out=-165,in=25] ++(-0.2,0.1)  coordinate (#2-15)
+     to [out=-155,in=90] (#2-1);
+    \draw[#1] (#2-5)
+     to [out=90,in=0] ++(-0.2,0.1)  coordinate (#2-14)
+     to [out=-180,in=15] ++(-1.2,0.2)  coordinate (#2-15)
+     to [out=-165,in=25] ++(-0.2,0.1)  coordinate (#2-15)
+     to [out=-155,in=90] (#2-1);
+     
+    \draw[draw=black, fill=blue!50]  (#3)++(0.4,-0.1)  coordinate (#2-20)
+	to [out=0,in=-90] ++(0.35,+0.2) coordinate (#2-21)
+	to [out=90,in=135]  (#2-20);
+	\draw[draw=black, fill=blue!50]  (#3)++(0.4,0.7)  coordinate (#2-22)
+	to [out=-90,in=-135] ++(0.15,+0.02) coordinate (#2-23)
+	to [out=45,in=-90] ++(0.2,+0.15) coordinate (#2-24)	
+	to [out=90,in=35] ++(-0.2,-0.02) coordinate (#2-25)	
+	to [out=-145,in=90]  (#2-22);
+	\fill[color = blue, opacity = 0.2] (#2-21)
+	to [out=90,in=135]  (#2-20)
+	to [out=90,in=-90]  (#2-22)
+	to [out=-90,in=-135] (#2-23)
+	to [out=45,in=-90] (#2-24)
+	to [out=-90,in=90]	(#2-21);
+  }
+  

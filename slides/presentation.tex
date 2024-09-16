@@ -1,0 +1,350 @@
+\documentclass[pdf,aspectratio=169,10pt]{beamer}
+\input{preamble}
+\input{../img/tools_tikz_figure}
+
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{caption}[numbered]
+
+\title[Tobar \& Chapel, Optimal Transport for Signal Processing]{Optimal Transport for Signal Processing \\ \vspace{1em} \large{\it A tutorial at MLSP 2024}
+}
+\author[]{Felipe Tobar\inst{1} \and Laetitia Chapel\inst{2}}
+\institute[]{\inst{1} Initiative for Data \& Artificial Intelligence, Univeridad de Chile \and \inst{2} IRISA, Obelix team, Institut Agro Rennes-Angers}
+
+\date{22 September, 2024}  
+
+
+\begin{document}
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{Overview} 
+    \tableofcontents
+\end{frame}
+
+
+\section{Introduction}
+
+\begin{frame}{Speaker's presentation}
+Photos and mini-bio
+\end{frame}
+
+
+\begin{frame}{Why Optimal Transport}
+    State main advantages and show applications in different fields. Emphasis on why OT and not other techniques
+\end{frame}
+
+\begin{frame}{Origins of OT}
+    First uses: moving mass/dirt
+\end{frame}
+
+\begin{frame}{Brief history of OT}
+    From Monge to today
+\end{frame}
+
+\section{Part I: The Optimal Transport Problem}
+
+
+\begin{frame}{Intuition}
+    \begin{figure}
+        \includegraphics[height=0.7\textheight]{../img/wine.png}  
+    \end{figure}
+    Motivation: vineyards transporting grapes from harvest site to processing plants
+\end{frame}
+
+
+\begin{frame}{The assigment problem}
+    \begin{figure}
+        \includegraphics[height=0.7\textheight]{../img/wine_assignment.pdf}  
+    \end{figure}
+    Build the assignment problem from intuition. Use the above figure to explain all possible ways to assign: straight lines, what's the cost, \emph{cheapest transport}. 
+\end{frame}
+
+\begin{frame}{The assigment problem: encoding real-world}
+
+\begin{minipage}{0.45\textwidth}
+\begin{itemize}
+    \item Weighted masses
+    \item Different number of sources/targets
+    \item Straight path is not possible
+    \item New sample becomes available
+\end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}{0.5\textwidth}
+ \begin{figure}
+        \includegraphics[width=0.99\textwidth]{../img/wine_assignment.pdf}  
+    \end{figure}
+\end{minipage}
+
+\end{frame}
+
+
+\begin{frame}[plain]{Monge formulation\footnote{Monge, G. (1781).
+Mémoire sur la théorie des déblais et des remblais.
+De l'Imprimerie Royale.}}
+\bblue{Objective:} Move a pile of mass from one location to another at a minimum effort\\
+\vspace{1em}
+\bred{Let us first set up our notation} 
+
+\begin{minipage}[t]{0.69\textwidth}
+
+   \begin{itemize}
+       \item \bblue{Piles of mass} are probability distributions, $\mu$ and $\nu$, corresponding to random variables $X\in\cX$ and $Y\in\cY$. 
+       \item \bblue{Moving procedure} is a function $T: x \in \cX\mapsto Y\in\cY$.
+    \item \bblue{Moving cost} encoded as $c: (x,y)\in\cX\times\cY\mapsto c(x,y)\in\R$.
+    \item Optimise the total transport cost
+    \begin{equation}
+        \sum_{x\in\cX} c(x_i, T(x_i))
+    \end{equation}
+    over $M_{X,Y} = \{ T: \cX \to \cY,\ s.t.,\ T_{\#\mu}=\nu \}$.
+   \end{itemize}
+\end{minipage}   
+\hfill
+\begin{minipage}{0.3\textwidth}
+       
+\end{minipage}   
+
+\end{frame}
+
+
+\begin{frame}{The transport map (aka the \emph{pushforward} operator $T_\#$)}
+    $T$ \emph{transports} mass from $\cX$ to $\cY$, meaning that for any subset $A\in\cY$, one has 
+    \begin{equation}
+        \nu(A) = \mu(T^{-1}(A)),
+    \end{equation}
+    where $T^{-1}(A)=\{x\in\cX, s.t.\ T(x)\in A \}$ is the preimage of $A$ under $T$.
+
+
+\begin{tikzpicture}[>=stealth,scale=1.5]
+\small
+ \blobA[dashed]{a}{0,0}
+  \blobB[dashed]{b}{3,0}
+   \node at(0.2,0) {$\XX$};
+    \node at(3.2,0) {$\YY$};
+  \draw[->] (1.8,1) to[bend left] node[above]{$T$} (3.1,1); 
+  \node at(1.5,-0.5) {\footnotesize $A=\{x\in\XX:T(x)\in B\}$};
+ \node at(3.55,0) {\scriptsize $B$};
+ \draw[->] (0.75,-0.4) to (1.05,-0.05);   
+ \node at(6,0.5) {$T\#{\color{red!50} \mu} = {\color{blue!50} \nu}$};
+  \node at(6.3,0.2) {i.e., ${\color{red!50} \mu(A)} = {\color{blue!50} \nu(B)}$};
+\end{tikzpicture}\\
+{\small Figure adapted from Thorpe's book.\footnote{Infinite thanks to Elsa Cazelles (IRIT, CNRS) for kindly sharing these beautiful \texttt{tikz} figures for this part.}}
+\end{frame}
+
+
+
+\begin{frame}{\bred{Example:} Colour transfer}
+\begin{minipage}{0.49\textwidth}
+\bblue{Original images}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../img/ex1_original_images.pdf}
+    \end{figure}
+
+\bblue{Histograms}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../img/ex1_colour_histograms.pdf}
+    \end{figure}
+    
+\end{minipage}
+\hfill
+\begin{minipage}{0.49\textwidth}
+\bblue{Histograms}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../img/ex1_result.pdf}
+    \end{figure}
+\end{minipage}
+
+\begin{textblock}{0.45}(0.55,0.52)
+\tiny
+$\bullet$ Ferradans, S., Papadakis, N., Peyre, G., \& Aujol, J. F. (2014). Regularized discrete optimal transport. SIAM Journal on Imaging Sciences, 7(3), 1853-1882.\\
+
+$\bullet $Code adapted from POT documentation
+\end{textblock}
+\end{frame}
+
+\begin{frame}{Example of domain adaptation}
+Let us consider the following source and target classification problems
+        \begin{figure}
+        \includegraphics[width=0.7\textwidth]{../img/DA_original_samples.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Example of domain adaptation}
+Let us consider the following source and target classification problems
+        \begin{figure}
+        \includegraphics[width=0.8\textwidth]{../img/DA_coupling.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Example of domain adaptation}
+Let us consider the following source and target classification problems
+        \begin{figure}
+        \includegraphics[width=0.6\textwidth]{../img/DA_samples.pdf}
+    \end{figure}
+\end{frame}
+
+
+
+
+\begin{frame}{Observation}
+Not all problems feature \emph{atoms}, sometimes we have weighted samples
+\end{frame}
+
+
+
+\begin{frame}{Neither existence nor uniqueness is guaranteed}
+        \begin{figure}
+        \includegraphics[width=0.7\textwidth]{../img/existence_uniqueness.pdf}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Kantorovich formulation: mass splitting}
+
+     \begin{figure}
+        \includegraphics<1>[width=0.6\textwidth]{../img/wine_assignment.pdf}
+        \includegraphics<2>[width=0.6\textwidth]{../img/wine_assignment_split.pdf}
+    \end{figure}
+\end{frame} 
+
+\begin{frame}{Transport plan} 
+\begin{textblock}{0.35}(0.72,0.02)
+     \begin{figure}
+        \includegraphics[width=0.6\textwidth]{../img/wine_assignment_split.pdf}
+    \end{figure}
+\end{textblock}
+
+\begin{equation*}
+    \inf_{P\in\Pi_{\mu,\nu}} \langle P , C\rangle = \sum_{i,j}^{n,m} C_{ij}P_{ij} 
+\end{equation*}
+where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in [0,1]^{m\times n} :  \sum_{i=1}^m P_{ij} = \nu_j,  \sum_{j=1}^n P_{ij} = \mu_i \}$
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../img/kantorovich.pdf}
+    \end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Example:}
+    Consider the following source and target distributions
+         \begin{figure}
+        \includegraphics<1-2>[width=0.23\textwidth]{../img/kantorovich_discrete_histogram.pdf}\hspace{2em}
+        \includegraphics<2>[width=0.45\textwidth]{../img/kantorovich_discrete_solution.pdf}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Example (Continuous)}
+    Let us now consider two  distributions over a continuous support
+         \begin{figure}
+        \includegraphics[width=0.8\textwidth]{../img/kantorovich_continuous_density.pdf}\hspace{2em}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}{Example (Continuous)}
+    Let us now consider two  distributions over a continuous support
+    \begin{minipage}{0.6\textwidth}
+        \begin{figure}
+            \includegraphics[width=0.8\textwidth]{../img/kantorovich_continuous_solution.pdf}
+        \end{figure}
+    \end{minipage}
+    \hspace{0.25em}
+    \begin{minipage}{0.36\textwidth}
+        \bred{Observe that the plan remained \emph{sparse}, i.e., the mass did not spread  much}
+
+        This motivates the following results
+    \end{minipage}
+\end{frame}
+
+\begin{frame}{Observations}
+    \begin{itemize}
+        \item Let us consider a cost $c(x,y) = |x-y|^p, p\geq 1$. Then, if $\mu$ and $\nu$ are absolutely continuous wrt the Lebesgue measure, the Kantorovich problem as a unique solution. Furthermore, this solution is the same solution of the Monge problem.
+        \item If $p=2$, the optimal map is the gradient of a convex function
+        \item In some cases the optimal plan will require to split mass (e.g., in the case of atomic measures) and thus Monge's solution may fail to exist. 
+        \item Luckily, from a (Kantorovich) transport plan we can always extract a tranport map, e.g., via the barycentric projection
+    \end{itemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Example: Domain adaptation}
+    Cite some papers and hopefully show some simulations
+\end{frame}
+
+
+\begin{frame}{Dual formulation}
+    Formualtion and illustration with the factories
+\end{frame}
+
+\begin{frame}{Examples}
+    See which ones make sense here:  Domain Adaptation,  OT for fairness,  Colour-transfer, WGANs.
+\end{frame}
+
+
+\section{Part II: Metric properties}
+
+
+
+\begin{frame}{Motivation}
+    We need a distance, OT provides one. Show how some \emph{strong} topologies cannot be used for learning systems
+\end{frame}
+
+\begin{frame}{The Wasserstein distance}
+    Definition, properties
+\end{frame}
+
+\begin{frame}{The Wasserstein space}
+    Definition, properties
+\end{frame}
+
+\begin{frame}{Convergence properties, weak topology}
+    Revise the above example
+\end{frame}
+
+
+\begin{frame}{Geodesic properties}
+    Interpolation
+\end{frame}
+
+\begin{frame}{The Wasserstein barycenter}
+    Definition, properties, example
+\end{frame}
+
+
+\begin{frame}{Examples}
+    See which ones make sense here:  OT spectral transport, Wasserstein Bays, VAEs.
+\end{frame}
+
+
+\section{Closing remarks}
+
+\begin{frame}{What we did not see}
+   multimarginal, unbalanced OT, partial OT, Gromov-Wasserstein, 
+\end{frame}
+
+
+\begin{frame}{Conclusions \& the future}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[plain]
+    \titlepage
+\end{frame}
+
+
+
+
+
+\end{document}

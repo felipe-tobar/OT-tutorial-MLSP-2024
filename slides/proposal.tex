@@ -1,0 +1,158 @@
+\documentclass{article}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{xcolor}
+\usepackage{paralist}
+\usepackage{setspace}
+\usepackage{soul}
+\usepackage{hyperref}
+\hypersetup{urlcolor=blue,colorlinks=true,linkcolor=black}
+\renewenvironment{thebibliography}[1]{%
+  \subsection*{\refname}%
+  \let\par\relax\let\newblock\relax%
+  \inparaenum[{[}1{]}]}{\endinparaenum}
+
+% ------------------------------------
+% Title.
+% ------
+\title{\vspace{-1.5cm}Tutorial proposal:
+Optimal Transport for Signal Processing
+\vspace{-.2cm}}
+%
+% Name of presenter(s).
+% ---------------
+\author{Laetitia Chapel, Felipe Tobar}
+% ------------------------------------
+
+\date{}
+\begin{document}
+\maketitle\vspace{-1cm}
+% ------------------------------------
+% Tutorial proposals should not exceed 2 pages and should include the following essential information:
+%   - Title of the tutorial.
+%   - Presenter name(s), contact information, short biography (max. 1000 char.), and five recent related publications.
+%   - A summary of presenter’s previous tutorial delivery experience.
+%   - A detailed description of the tutorial outlining the topics and subtopics covered (including references to state-of-the-art)
+%   - The rationale for the tutorial 
+%   - A statement of any previous or related versions of this tutorial.
+% ------------------------------------
+
+
+
+\subsection*{1) Presenters}
+
+\paragraph{Laetitia Chapel (\href{mailto:laetitia.chapel@irisa.fr}{\texttt{laetitia.chapel@irisa.fr}}).} Prof.~Chapel is a full professor in computer science at Institut Agro Rennes-Angers. She received a PhD in computer science in 2007 and a French habilitation to supervise research in computer science in 2022. Her research takes place within the OBELIX team of IRISA, a mixed research unit in computer science, signal and image processing, and robotics. Her main research topic is machine learning with a particular focus on structured data (such as time series, graphs, hierarchical representations) and with applications in remote sensing. She notably has worked in the field of computational optimal transport, devising several algorithms to make optimal transport more robust and tractable. She contributes to the \href{https://pythonot.github.io/}{Python Optimal Transport toolbox}. \\
+\textbf{Website:} \href{https://people.irisa.fr/Laetitia.Chapel/}{people.irisa.fr/Laetitia.Chapel}
+
+
+\medskip%
+\medskip%
+%\noindent\underline{\textit{5 recent related publications}}:\\
+\noindent\textbf{[1]} T. Vayer, \textbf{L. Chapel}, R. Flamary, R. Tavenard, N. Courty, “Optimal transport for structured data with application on graphs”, \emph{International Conference on Machine Learning}, 2019. \\
+\textbf{[2]} T. Vayer, R. Flamary, R. Tavenard, \textbf{L. Chapel}, N. Courty, “Sliced Gromov-Wasserstein”, \emph{Advances in Neural Information Processing Systems}, 2019.  \\
+\textbf{[3]} \textbf{L. Chapel}, M. Akaya, G. Gasso, "Partial optimal tranport with applications on positive-unlabeled learning," \emph{Advances in Neural Information Processing Systems}, 2020. \\
+\textbf{[4]} G. Mahey, \textbf{L. Chapel}, G. Gasso, C. Bonet, N. Courty, “Fast optimal transport through sliced generalized Wasserstein geodesics”, \emph{Advances in Neural Information Processing Systems}, 2023
+ \\
+\textbf{[5]} F. Painblanc, \textbf{L. Chapel}, N. Courty, C. Friguet, C. Pelletier, R. Tavenard, “Match-And-Deform: Time series domain adaptation through optimal transport and temporal alignment”, \emph{Joint European Conference on Machine Learning and Knowledge Discovery in Databases}, 2023.
+
+
+
+
+
+\paragraph{Felipe Tobar (\href{mailto:ftobar@uchile.cl}{\texttt{ftobar@uchile.cl}}).} Dr Tobar is an Associate Professor at Universidad de Chile and the Director of the Initiative for Data and Artificial Intelligence of the same Institution. He holds Researcher positions at the Center for Mathematical Modeling and the Advanced Center for Electrical and Electronic Engineering. Felipe was a Research Associate at the Machine Learning Group, University of Cambridge, during 2015 and he received a PhD in Signal Processing from Imperial College London in 2014. Felipe’s research lies between Machine Learning and Statistical Signal Processing, including approximate inference, Bayesian nonparametrics, spectral estimation, optimal transport (OT) and Gaussian processes (GP). He is an author of the \href{https://github.com/GAMES-UChile/mogptk}{Multi-output GP Toolkit}. From Oct 2024, Dr Tobar will be with the Department of Mathematics at Imperial College London as a Senior Lecturer in Machine Learning. \\
+\textbf{Website:}  \href{https://www.dim.uchile.cl/~ftobar/}{www.dim.uchile.cl/\~ftobar}%
+
+
+\medskip%
+\medskip%
+%\noindent\underline{\textit{5 recent related publications}}:\\
+\noindent\textbf{[6]} E. Cazelles, A. Robert and \textbf{F. Tobar}, “The Wasserstein-Fourier distance for stationary time series," \emph{IEEE Transactions on Signal Processing}, vol. 69, pp. 709-721, 2021. \\
+\textbf{[7]} E. Cazelles, \textbf{F. Tobar}, J. Fontbona, “A novel notion of barycenter for probability distributions based on optimal weak mass transport”, \emph{Advances in Neural Information Processing Systems}, 2021.  \\
+\textbf{[8]} J. Backhoff, J. Fontbona, G. Rios, \textbf{F. Tobar}, "Bayesian learning with Wasserstein barycenters”, \emph{ESAIM: Probability and Statistics} 26, 436–472, 2022  . \\
+\textbf{[9]} \textbf{F. Tobar}, E. Cazelles, T. de Wolff, “Computationally-efficient initialisation of GPs: The generalised variogram method”, \emph{Transactions of Machine Learning Research}, 2023
+ \\
+\textbf{[10]} J. Backhoff-Veraguas, J. Fontbona, G. Rios, \textbf{F. Tobar}
+, “Stochastic gradient descent in Wasserstein space”, \emph{Journal of Applied Probability}, (in press), 2024.
+
+
+
+\subsection*{2) Presenter's previous tutorial delivery experience} 
+\textbf{Prof Chapel} has delivered tutorials on OT at the {CNRS Summer School on Geometry and Data} (2023), and the {Summer School on Statistical and Geometric Divergences for ML} (2022). In 2024, she presented her work at the \href{https://kantorovich.org/event/ki-seminar-chapel/}{Kantorovich Initiative} (USA), the \href{https://www.icts.res.in/seminar/2024-04-23/laetitia-chapel}{International Centre for Theoretical Sciences} (India), and at the \href{https://sites.google.com/view/ot-berlin-2024}{Optimal Transport Workshop: From theory to applications} (Berlin). She was a keynote speaker at the \href{https://otmlworkshop.github.io/schedule/}{Optimal Transport and Machine Learning @NeurIPS} workshop in 2023. 
+
+\noindent\textbf{Dr Tobar} has delivered tutorials on Gaussian processes at the \href{https://neurips.cc/virtual/2021/tutorial/21890}{Neural Information Processing Systems} 2021, \href{https://www.youtube.com/watch?v=5mBdCGJDbg8&ab_channel=GaussianProcessSummerSchool}{Gaussian Process Summer School} 2021, and the \href{https://www.youtube.com/watch?v=_KTGSIlMXwY}{IEEE CIS-Chile Summer School on Computational Intelligence} 2021. He has also presented his work at Imperial College (\href{https://www.imperial.ac.uk/events/160503/lc2-seminar-felipe-tobar-universidad-de-chile-tba/}{LC2 Seminar} \& \href{https://sites.google.com/view/rossella-arcucci/home/calendar-datalearning}{DataLearning Seminar}), University of Cambridge (\href{https://talks.cam.ac.uk/talk/index/193046}{ML Group}), University of Toulouse (IRIT, Signal Processing Group), Paris-Saclay (\href{https://www.uqsay.org/2023/01/uqsay-53.html}{UQ Seminar}), and Inria (\href{https://misscausal.gitlabpages.inria.fr/misscausal.gitlab.io/events.html}{CIMD}).
+
+
+
+
+\subsection*{3) Summary}
+% Detailed description of the tutorial outlining the topics and subtopics covered.
+The tutorial will be divided into two parts. First, we will introduce the usual formulations of OT, provide historical context, and discuss metric properties and computational considerations [2,4,8,10,12,14]. Second, we will show three applications to problems in signal processing: i) matching time series using dynamic time warping, ii) colour transfer via histogram transport, and iii) a novel distance between time series applying a Wassserstein-like distance to power spectra [1,3,5,6,7,9,11,13]. \\
+
+\medskip
+\noindent\textbf{Contents}
+\begin{enumerate}
+  \item[$\bullet$] Part I: An Introduction to Discrete Optimal Transport (45min)
+  \begin{enumerate}
+    \item History, Monge \& Kantorovich formulations (15min)
+    \item Geometric properties, Wasserstein distance and barycenters (15min)
+    \item Entropic regularization, computation and examples (15min)
+  \end{enumerate}
+  \item[$\bullet$] Part II: Three applications to Signal Processing  (45min)
+  \begin{enumerate}
+    \item Colour transfer via histogram matching (15min)
+    \item Dynamic time warping (15min)
+    \item The Wasserstein-Distance for time series (15min)
+  \end{enumerate}
+\end{enumerate}
+
+\subsection*{4) Importance, timeliness, and novelty}
+% The rationale for the tutorial including:
+%   - the importance,
+%   - timeliness,
+%   - novelty of the tutorial, and
+%   - how it can introduce new ideas, topics, and tools to the MLSP community.
+
+The proven success of the machine learning (ML) perspective to signal processing (SP) has paved the way for incorporating state-of-the-art mathematical methods into the theory and practice of time series and image processing. Optimal transport (OT) is one of those methods which provides a general-purpose framework to quantify the discrepancy between two probability distributions by lifting a distance defined on their support [12,14]. In the last decade, the impact of OT in ML cannot be overstated: current OT-powered ML methods include GANs [15], VAEs [16], distribution regression [17] and clustering [18] with applications on genomics, health, finance, audio, robotics, and astrophysics. \\
+
+\noindent Though OT has been applied to time series [5,6,9,11,13], we claim that the full potential of OT for signal processing remains largely unexplored. Furthermore, due to the maturity reached by the theory and methods of OT [1-10], the incorporation of the OT toolbox into SP practice today is not only needed but is also more relevant and timely than ever. This tutorial introduces OT and shows recent successful case studies of OT-based signal processing (SP) applications, as well as pointing out novel research direction and open questions in the intersection of OT, ML and SP. All with the aim of encouraging the adoption of the OT toolbox by the MLSP community. 
+
+
+
+
+
+\subsection*{5) Statement of any previous or related versions of this tutorial}
+% Specify any previous versions of the material given by any of the presenters, and if and how it will be modified for MLSP 2024.
+
+The proposed tutorial has not been presented before. Furthermore, to the best of our knowledge, no tutorial on Optimal Transport for Signal Processing has ever been presented to the academic community. \\
+
+\medskip
+\medskip
+\noindent\textbf{References (in addition to the presenters’ references [1-10] above)
+}
+\medskip
+\medskip
+
+\noindent\textbf{[11]} S. Kolouri, S.R. Park, M. Thorpe, D. Slepcev, G.K. Rohde, “Optimal mass transport: Signal processing and machine-learning applications”, \emph{IEEE Signal Processing Magazine} 34 (4), 43-59, 2017\\
+\textbf{[12]} G. Peyré, M. Cuturi, “Computational optimal transport: With applications to data science”. \emph{Foundations and Trends® in Machine Learning}, 2019.\\
+\textbf{[13]} M. Thorpe, S. Park, S. Kolouri, G.K. Rohde, D. Slepčev, “A transportation distance for signal analysis”, \emph{Journal of Mathematical Imaging and Vision} 59, 187-210, 2017\\
+\textbf{[14]} R. Flamary, N. Courty, “Optimal transport for machine learning tutorial” 2018. Available: \href{https://remi.flamary.com/cours/tuto_otml.html}{here}.\\
+\textbf{[15]} M. Arjovsky, S. Chintala, and L. Bottou. “Wasserstein generative adversarial networks”, \emph{International Conference on Machine Learning}, pages 214–223. PMLR, 2017.\\
+\textbf{[16]} I. Tolstikhin, O. Bousquet, S. Gelly, and B. Schoelkopf. “Wasserstein auto-encoders”. \emph{International Conference on Learning Representations}, 2018.\\
+\textbf{[17]} D. Meunier, M. Pontil, and C. Ciliberto. “Distribution regression with sliced Wasserstein kernels”. \emph{International Conference on Machine Learning}, vol.~162, pages 15501– 15523. 2022.\\
+\textbf{[18]} N. Ho, X. Nguyen, M. Yurochkin, H.~H.~Bui, V. Huynh, and D. Phung. “Multilevel clustering via Wasserstein means”. \emph{Proceedings of the International Conference on Machine Learning}, pages 1501–1509, 2017.
+
+
+
+
+\iffalse
+\small
+\begin{spacing}{1.1}
+\begin{thebibliography}{author-year }
+\bibitem{ref1} Reference 1.
+\bibitem{ref2} Reference 2.
+\end{thebibliography}
+\end{spacing}
+\fi
+
+\end{document}
