@@ -18,6 +18,12 @@
 
 \begin{frame}[plain]
     \titlepage
+    \footnotesize
+    \flushright{
+    \bblue{ 
+    \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/}{\texttt{github.com/felipe-tobar/OT-tutorial-MLSP-2024}}
+    }
+    }
 \end{frame}
 
 
@@ -30,7 +36,33 @@
 \section{Introduction}
 
 \begin{frame}{Speaker's presentation}
-Photos and mini-bio
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \bblue{Felipe Tobar}\\
+\includegraphics[trim={0cm 0cm 0cm 2cm},clip,height=0.2\textheight]{../img/ftobar_photo_light.jpg}\\
+Associate Professor\\
+IDIA, Universidad~de Chile\\
+~\\
+\emph{Research themes}: Gaussian Processes, Optimal Transport, Diffusion Models\\
+\href{https://www.dim.uchile.cl/~ftobar/}{\texttt{www.dim.uchile.cl/$\sim$ftobar}}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \bblue{Laetitia Chapel}\\
+\includegraphics[trim={50cm 15cm 45cm 12cm},clip,height=0.2\textheight]{../img/LC_light.jpg}\\
+Full Professor in Computer Science\\
+IRISA Lab, France\\
+~\\
+\emph{Research themes}: Optimal Transport, machine learning on structured data \\
+\href{https://people.irisa.fr/Laetitia.Chapel/}{\texttt{people.irisa.fr/Laetitia.Chapel}}
+\end{minipage}
+
+\vspace{1em}
+\bred{Forenote on implementation}
+\begin{itemize}
+    \item Examples in this tutorial are based on \bblue{POT: Python Optimal Transport Toolbox}
+    \item Available here \href{https://pythonot.github.io/}{\texttt{pythonot.github.io}}
+\end{itemize}
 \end{frame}
 
 
@@ -38,15 +70,34 @@ Photos and mini-bio
     State main advantages and show applications in different fields. Emphasis on why OT and not other techniques
 \end{frame}
 
-\begin{frame}{Origins of OT}
-    First uses: moving mass/dirt
+
+
+
+\begin{frame}{Origins of OT: Gaspard Monge (1781)}
+How to transport a pile of sand onto a hole in an optimal way?
+
+  \begin{center}
+  \includegraphics[height=3cm]{../img/deblais}\vspace{0.2cm}
+  \begin{tabular}{cc}
+\includegraphics[height=4.2cm]{../img/monge0}& \includegraphics[height=4.2cm]{../img/monge1781} \\
+  \end{tabular}
+  
+  \end{center}
+{\tiny Mémoire sur la théorie des déblais et des remblais \cite{monge1781memoire}.}
 \end{frame}
+
 
 \begin{frame}{Brief history of OT}
     From Monge to today
 \end{frame}
 
 \section{Part I: The Optimal Transport Problem}
+
+
+\begin{frame}
+    \Large \bblue{Part I: The Optimal Transport Problem}
+\end{frame}
+
 
 
 \begin{frame}{Intuition}
@@ -89,24 +140,39 @@ Mémoire sur la théorie des déblais et des remblais.
 De l'Imprimerie Royale.}}
 \bblue{Objective:} Move a pile of mass from one location to another at a minimum effort\\
 \vspace{1em}
-\bred{Let us first set up our notation} 
 
 \begin{minipage}[t]{0.69\textwidth}
-
+    \bred{Let us first set up our notation} 
    \begin{itemize}
        \item \bblue{Piles of mass} are probability distributions, $\mu$ and $\nu$, corresponding to random variables $X\in\cX$ and $Y\in\cY$. 
        \item \bblue{Moving procedure} is a function $T: x \in \cX\mapsto Y\in\cY$.
     \item \bblue{Moving cost} encoded as $c: (x,y)\in\cX\times\cY\mapsto c(x,y)\in\R$.
-    \item Optimise the total transport cost
+   \end{itemize}
+\vspace{1em}
+
+    \bred{Solve:} 
+ Optimise the total transport cost
     \begin{equation}
         \sum_{x\in\cX} c(x_i, T(x_i))
     \end{equation}
     over $M_{X,Y} = \{ T: \cX \to \cY,\ s.t.,\ T_{\#\mu}=\nu \}$.
-   \end{itemize}
 \end{minipage}   
 \hfill
-\begin{minipage}{0.3\textwidth}
-       
+\begin{minipage}[t]{0.3\textwidth}
+\vspace{2em}
+       \begin{tikzpicture}[>=stealth,scale=1.3]
+\small
+ \blobA[dashed]{a}{0,0}
+  \blobB[dashed]{b}{1.5,-2}
+   \node at(0.2,0) {$\XX$};
+    \node at(3.2,-2.1) {$\YY$};
+  \draw[->] (0.5,-0.4) to[bend right] node[above]{\hspace{1em}  $T$} (1.4,-2); 
+  %\node at(1.5,-0.5) {\footnotesize $A=\{x\in\XX:T(x)\in B\}$};
+% \node at(3.55,0) {\scriptsize $B$};
+ %\draw[->] (0.75,-0.4) to (1.05,-0.05);   
+ %\node at(6,0.5) {$T\#{\color{red!50} \mu} = {\color{blue!50} \nu}$};
+  %\node at(6.3,0.2) {i.e., ${\color{red!50} \mu(A)} = {\color{blue!50} \nu(B)}$};
+\end{tikzpicture}
 \end{minipage}   
 
 \end{frame}
@@ -120,7 +186,7 @@ De l'Imprimerie Royale.}}
     where $T^{-1}(A)=\{x\in\cX, s.t.\ T(x)\in A \}$ is the preimage of $A$ under $T$.
 
 
-\begin{tikzpicture}[>=stealth,scale=1.5]
+\begin{tikzpicture}[>=stealth,scale=1.75]
 \small
  \blobA[dashed]{a}{0,0}
   \blobB[dashed]{b}{3,0}
@@ -133,7 +199,7 @@ De l'Imprimerie Royale.}}
  \node at(6,0.5) {$T\#{\color{red!50} \mu} = {\color{blue!50} \nu}$};
   \node at(6.3,0.2) {i.e., ${\color{red!50} \mu(A)} = {\color{blue!50} \nu(B)}$};
 \end{tikzpicture}\\
-{\small Figure adapted from Thorpe's book.\footnote{Infinite thanks to Elsa Cazelles (IRIT, CNRS) for kindly sharing these beautiful \texttt{tikz} figures for this part.}}
+{\small Figure adapted from Thorpe's book.\footnote{Infinite thanks to Elsa Cazelles (IRIT, CNRS) for kindly sharing these beautiful \texttt{tikz} figures.}}
 \end{frame}
 
 
@@ -211,15 +277,16 @@ De l'Imprimerie Royale.}}
         \includegraphics[width=0.7\textwidth]{../img/existence_uniqueness.pdf}
     \end{figure}
     \vspace{1em}
-\bred{Observation:} In the above examples, each sample \emph{weighted the same}, i.e., pixels, class instances. In some cases, we might have \emph{weighted samples}.
+\bred{Observation:} In the two examples above, each sample \emph{weights the same}, i.e., pixels, class instances. In some cases, we might have \emph{weighted samples}. In such cases, \textbf{Monge's map might be unable to transport the mass.}
 \end{frame}
 
 
-\begin{frame}{Kantorovich formulation: mass splitting}
+\begin{frame}{Kantorovich formulation: \onslide<3>{mass splitting}}
 
      \begin{figure}
         \includegraphics<1>[width=0.6\textwidth]{../img/wine_assignment.pdf}
-        \includegraphics<2>[width=0.6\textwidth]{../img/wine_assignment_split.pdf}
+        \includegraphics<3>[width=0.6\textwidth]{../img/wine_assignment_split.pdf}
+        \includegraphics<2>[width=0.6\textwidth]{../img/wine_assignment_q.pdf}
     \end{figure}
 \end{frame} 
 
@@ -233,18 +300,18 @@ De l'Imprimerie Royale.}}
 \begin{equation*}
     \inf_{P\in\Pi_{\mu,\nu}} \langle P , C\rangle = \sum_{i,j}^{n,m} C_{ij}P_{ij} 
 \end{equation*}
-where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in [0,1]^{m\times n} :  \sum_{i=1}^m P_{ij} = \nu_j,  \sum_{j=1}^n P_{ij} = \mu_i \}$
+where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in {[0,1]}^{m\times n} :  \sum_{i=1}^m P_{ij} = \nu_j,  \sum_{j=1}^n P_{ij} = \mu_i \}$
     \begin{figure}
         \includegraphics[width=0.9\textwidth]{../img/kantorovich.pdf}
     \end{figure}
 \end{frame}
 
-
+ 
 
 \begin{frame}{\bred{Example 3:} Discrete Kantorovich plan}
     Let consider the following source and target distributions
 
-\begin{minipage}{0.49\textwidth}
+\begin{minipage}{0.49\textwidth}  
 \begin{figure}
         \includegraphics[width=0.48\textwidth]{../img/kantorovich_discrete_histogram.pdf}\hspace{2em}
     \end{figure}
@@ -256,7 +323,7 @@ where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in [0,1]^{m\times n} :  \sum_{
     \end{figure}
 \end{minipage}
 
-\begin{textblock}{0.45}(0.62,0.54)
+\begin{textblock}{0.45} (0.62,0.54)
 \small
 \bred{
 \underline{
@@ -295,7 +362,7 @@ where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in [0,1]^{m\times n} :  \sum_{
 \end{frame}
 
 
-\begin{frame}{Observations}
+\begin{frame}{Observations} 
     \begin{itemize}
         \item Let us consider a cost $c(x,y) = |x-y|^p, p\geq 1$. Then, if $\mu$ and $\nu$ are absolutely continuous wrt the Lebesgue measure, the Kantorovich problem as a unique solution. Furthermore, this solution is the same solution of the Monge problem.
         \item If $p=2$, the optimal map is the gradient of a convex function
@@ -309,42 +376,277 @@ where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in [0,1]^{m\times n} :  \sum_{
 
 
 
+
 \begin{frame}{Dual formulation}
-    Formualtion and illustration with the factories
+
+Recall the primal formulation: $OT({\mu},{\nu}) = \inf _{\pi\in\Pi(\mu,\nu)} \iint c(x,y)\d\pi(x,y)$
+\begin{block}{}
+$$OT({\mu},{\nu}) = \sup_{(\phi,\psi)\in\Phi_c} \left(\int_{\XX} \phi d{\mu} + \int_{\XX} \psi d{\nu}\right)$$
+where
+$$\Phi_c : = \left\{(\phi,\psi)\in L_1(\mu)\times L_1(\nu)\ \mbox{s.t.}\ \phi(x) + \psi(y)\leq c(x,y)\right\}$$
+\end{block}
+
+\visible<2-3>{\vspace{0.3cm}\begin{itemize}
+\item[$\bullet$] $\phi$ and $\psi$ are scalar function also known as Kantorovich potentials
+\item[$\bullet$] Primal dual relationship : the support of $\pi\in\Pi^{\ast}(\mu,\nu)$, that is $\pi(x,y)$ is where $\phi(x)+\psi(y) = c(x,y)$.
+\end{itemize}}
+
+\visible<3>{\vspace{0.3cm} In the discrete setting:
+$$\int_{\XX} \phi d\left({\sum_{i=1}^na_i\delta_{x_i}}\right) + \int_{\XX} \psi d\left({\sum_{j=1}^mb_j\delta_{y_i}}\right) = \sum_{i=1}^na_i\underbrace{\phi(x_i)}_{\alpha_i} + \sum_{j=1}^mb_j\underbrace{\psi(y_j)}_{\beta_j}$$
+and $\Phi_c$ becomes $\{(\alpha,\beta)\in\R^n\times\R^m \ \mbox{s.t.}\ \alpha_i+\beta_j\leq c(x_i,y_j)\}$
+}
+
 \end{frame}
+
+
+
+\begin{frame}{Informal way of interpreting Kantorovich duality principle for the discrete case}
+$$OT({\mu},{\nu}) = \underset{\pi\in\Pi(\er{a},\eb{b})}{\min} \langle C, \pi \rangle = \max_{(\alpha,\beta)\in D_c} \ \langle \alpha,{a}\rangle + \langle \beta, {b}\rangle$$
+with
+$$D_c := \{(\alpha,\beta)\in\R^n\times\R^m \ \mbox{such that}\ \forall (i,j)\in\{1,\ldots,n\}\times\{1,\ldots,m\}, \alpha_i+\beta_j\leq C_{ij}\}$$
+
+\begin{center}
+\includegraphics[width=0.9\textwidth]{../img/wine_load1.pdf}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}{Intuition from Caffarelli : the shipper's problem}
+One vendor comes and sets her principle:
+\begin{itemize}
+\item[$\bullet$] $\alpha_i$ = price for \textbf{loading} a unit of coal at place $\er{x_i}$ (no matter where it goes)
+\item[$\bullet$] $\beta_j$ = price for \textbf{unloading} a unit of coal at place $\eb{y_j}$ (no matter from which mines it comes from)
+\end{itemize}
+
+\begin{center}
+\includegraphics[width=0.9\textwidth]{../img/wine_load2.pdf}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Intuition from Caffarelli : the shipper's problem}
+
+\begin{itemize}
+\item[$\bullet$] There are exactly $\er{a_i}$ units at mine $\er{x_i}$ and $\eb{b_j}$ needed at factory $\eb{y_j}$; the vendor asks the price (that she wants to maximize!)
+$$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
+\visible<2-6>{\item[$\bullet$] Negative price are allowed !}
+\visible<3-6>{\item[$\bullet$] Does the vendor have a competitive offer? Her pricing scheme implies that transferring one unit of coal from mine ${x_i}$ to factory $\eb{y_j}$ costs exactly $\alpha_i+\beta_j$.}
+\visible<4-6>{\item[$\bullet$] Recall the primal problem : the cost of shipping one unit from ${x_i}$ to ${y_j}$ is $C_{i,j}$.}
+\visible<5-6>{\item[$\bullet$] Good deal for the driver implies $\alpha_i+\beta_j\leq C_{ij}$.}
+\visible<6>{\item[$\bullet$] the driver checks that the vendor's proposition is a better deal:
+\begin{align*}
+\sum_{i,j} \pi_{ij}C_{ij}\geq \sum_{i,j} \pi_{ij}(\alpha_j+\beta_j) &= \left(\sum_i\alpha_i\sum_j\pi_{ij}\right) + \left(\sum_j\beta_j\sum_i\pi_{ij}\right)\\
+& = \langle\alpha, a\rangle + \langle\beta, b\rangle
+\end{align*}}
+\end{itemize}
+
+\end{frame}
+
+
+
 
 \begin{frame}{\bred{Example 5:} Wasserstein GANs}
-diagrams, figures and hopefully code
+\bblue{Recall: GANs}
+
+    \begin{figure}
+        \centering
+            \includegraphics[width=0.9\textwidth]{../img/gan_diag.pdf}
+        \end{figure}
+
+
 \end{frame}
 
 
-\section{Part II: Metric properties}
+\section{Part II: The Wasserstein distance}
+
+
+
+\begin{frame}
+    \Large \bblue{Part II: The Wasserstein distance}
+\end{frame}
+
 
 
 
 \begin{frame}{Motivation}
-    We need a distance, OT provides one. Show how some \emph{strong} topologies cannot be used for learning systems
+    \bred{OT defines a family of distances between measures}\\
+    \begin{minipage}{0.59\textwidth}
+        The \bblue{Kantorovitch problem}
+        \begin{equation*}
+            P^\star \in \inf_{P\in\Pi_{\mu,\nu}} \langle P , C\rangle = \sum_{i,j}^{n,m} C_{ij}P_{ij} 
+        \end{equation*}
+        allows defining the \bblue{Wasserstein distance} of order $p$
+        \begin{equation*}
+            W^p_p(\mu, \nu) =  \langle P^\star , C\rangle
+        \end{equation*}
+        where the moving cost $c(x, y) = {d(x, y)}^p = \| x - y \|^p$.\\
+        It is often depicted as an ``horizontal'' distance
+        
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.4\textwidth}
+    \begin{figure}
+        \centering
+            \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=0.9\textwidth]{../img/horizontal_distance.pdf}
+        \end{figure}
+        \centering
+        \small
+    \bred{
+    \underline{
+        Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Horizontal distance.ipynb}{Horizontal distance.ipynb}
+    }}
+    \end{minipage}
+    
+    %We need a distance, OT provides one. Show how some \emph{strong} topologies cannot be used for learning systems
 \end{frame}
 
 \begin{frame}{The Wasserstein distance}
-    Definition, properties
+
+    \begin{itemize}
+        \item Does not need overlapping support
+        \item Tells if the distributions are different, and also how much they are different!
+    \end{itemize}
+    \begin{figure}
+        \centering
+            \includegraphics[trim={0 0 0 0},clip, width=0.7\textwidth]{../img/wasserstein_1d.pdf}
+        \end{figure}
+        \centering
+        \small
+    \bred{
+    \underline{
+        Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Horizontal distance.ipynb}{Horizontal distance.ipynb}
+    }}
+
 \end{frame}
 
 \begin{frame}{The Wasserstein space}
-    Definition, properties
+    \bblue{Wasserstein space $\mathbb{W}_p$:} space endowed with the distance $W_p$
+    \begin{itemize}
+        \item In the space $\mathbb{W}_p(\mathbb{R}^d)$, we have $W_p(\mu_n, \mu) \to 0$ iff $\mu_n \to \mu$
+        \item In the space $\mathbb{W}_p(\mathbb{R}^d)$, if we have $\mu_n \to \mu$ then $W_p(\mu_n, \mu) \to 0$ 
+    \end{itemize}
+    \bblue{Example} of a gradient flow on the support of a distribution that minimize $W_2^2(\mu_t, \mu)$:
+    \begin{figure}
+        \centering
+            \only<1>{\includegraphics[trim={2cm 2cm 2cm 2.5cm},clip, width=0.6\textwidth]{../img/GF_init.pdf}}
+            \only<2>{\includegraphics[trim={2cm 2cm 2cm 2.5cm},clip, width=0.6\textwidth]{../img/GF_step1.pdf}}
+            \only<3>{\includegraphics[trim={2cm 2cm 2cm 2.5cm},clip, width=0.6\textwidth]{../img/GF_step2.pdf}}
+            \only<4>{\includegraphics[trim={2cm 2cm 2cm 2.5cm},clip, width=0.6\textwidth]{../img/GF_step3.pdf}}
+            \only<5>{\includegraphics[trim={2cm 2cm 2cm 2.5cm},clip, width=0.6\textwidth]{../img/GF_final.pdf}}            
+        \end{figure}
+        \bred{
+    \underline{
+        \centering
+        Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wasserstein Gradient Flows.ipynb}{Wasserstein Gradient Flows.ipynb}
+    }}
 \end{frame}
 
-\begin{frame}{Convergence properties, weak topology}
-    Revise the above example
-\end{frame}
 
 
 \begin{frame}{Geodesic properties}
-    Interpolation
+    \begin{minipage}{0.59\textwidth}
+    A geodesic generalizes the concept of a straight line between two points\\
+    \begin{figure}
+        \centering
+            \includegraphics[trim={2cm 4.5cm 2cm 5cm},clip, width=0.7\textwidth]{../img/straightLine.pdf}
+        \end{figure}
+
+    It is a curve that represents the shortest path between two manifolds\\
+    Euclidean space with a $l_2$ distance is a \bred{geodesic space}\\
+    \begin{equation*}
+        \forall t \in [0,1],\quad \mu^{1\to 2}(t) = t\mu_2 + (1-t) \mu_1
+    \end{equation*} 
+    Allows ``vertical'' interpolation between the distributions
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\textwidth}
+
+        \begin{figure}
+            \centering
+                \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=1\textwidth]{../img/geodesic_Euc_1d.pdf}
+            \end{figure}
+        \centering
+        \small
+    \bred{
+    \underline{
+        Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wasserstein Geodesics.ipynb}{Wasserstein Geodesics.ipynb}
+    }}
+\end{minipage}
+\end{frame}
+
+\begin{frame}{Geodesic properties}
+    \begin{minipage}{0.59\textwidth}
+    $\mathbb{W}_p$ is a \bred{geodesic space}
+    \begin{itemize}
+        \item Given a Monge map $T$ between $\mu_1$ and $\mu_2$ such that $T_{\#}\mu_1 = \mu_2$, a geodesic curve $\mu^{1\to 2}$ is
+        \begin{equation*}
+\forall t \in [0,1],\quad \mu^{1\to 2}(t) = {(t T + (1-t)\text{Id})}_{\#} \mu_1
+        \end{equation*} 
+        \item It represents the shortest path (on the Wasserstein space $\mathbb{W}_p$) between $\mu_1$ and $\mu_2$
+        \item Allows ``horizontal'' interpolation between the distributions
+        \item \emph{there is an animation on the notebook + also for the L2 interpolation!}
+    \end{itemize}
+\end{minipage}
+\hfill
+\begin{minipage}{0.4\textwidth}
+    \begin{figure}
+        \centering
+            \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=1\textwidth]{../img/geodesic_1d.pdf}
+        \end{figure}
+        \centering
+        \small
+    \bred{
+    \underline{
+        Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wasserstein Geodesics.ipynb}{Wasserstein Geodesics.ipynb}
+    }}
+\end{minipage}
 \end{frame}
 
 \begin{frame}{The Wasserstein barycenter}
-    Definition, properties, example
+    Given a set of distributions $\mu_s$, compute a Wasserstein Frechet mean 
+    \begin{equation*}
+        \overline{\mu} = \arg \min_{\mu} \sum_{i=1}^s \lambda_i W^p_p(\mu, \mu_i)
+    \end{equation*}
+    where $\lambda_i > 0$ and $\sum_{i=1}^s \lambda_i  = 1$.\\
+    Generalizes the interpolation between more than 2 measures.\\
+    For discrete measures $\mu = \sum_{i=1}^n a_i \delta_{x_i}$ $\Rightarrow$ we can fix the weights $a_i$ and/or the support $x_i$.
+    \only<1>{\begin{figure}
+        \centering
+            \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=0.5\textwidth]{../img/distrib_bary.pdf}
+        \end{figure}
+        }
+        \only<2>{\begin{figure}
+            \centering
+                \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=0.5\textwidth]{../img/barycenter_2d.pdf}
+            \end{figure}
+            }
+\end{frame}
+
+\begin{frame}{The Wasserstein barycenter}
+    \bred{Example on averaging over images} \\
+    \begin{minipage}{0.48\textwidth}
+        
+    \begin{figure}
+        \centering
+            \includegraphics[clip, height=0.7\textheight]{../img/symboles_wine_L2.pdf}
+            \caption{In the \bblue{Euclidean} space }
+        \end{figure}
+        
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+\begin{figure}
+            \centering
+                \includegraphics[clip, height=0.7\textheight]{../img/symboles_wine_bary.pdf}
+            \caption{In the \bblue{Wasserstein} space}
+            \end{figure}
+            
+        \end{minipage}
+        \bred{
+            \underline{
+                Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wass bary 4 distribs.ipynb}{Wass bary 4 distribs.ipynb}
+            }}
 \end{frame}
 
 
@@ -356,11 +658,17 @@ diagrams, figures and hopefully code
 \section{Closing remarks}
 
 \begin{frame}{What we did not see}
+    Computational OT \\
    multimarginal, unbalanced OT, partial OT, Gromov-Wasserstein, 
 \end{frame}
 
 
 \begin{frame}{Conclusions \& the future}
+    \begin{itemize}
+        \item OT is now on the toolkit for many fields such as signal processing, machine learning etc.
+        \item Defines a meaningful distances between distribution, with the extra information on how the particles should be moved
+        \item Some open challenges: computational complexity, curse of dimensionality (number of samples to approximate the solutions depends is exponential with the dimension), robustify the solution with statistical guarantees (noise? outliers?), OT on different spaces than Euclidean ones, adding some extra constraints (like a temporal consistency)
+    \end{itemize}
 \end{frame}
 
 
