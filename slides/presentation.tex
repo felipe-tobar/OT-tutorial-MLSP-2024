@@ -2,16 +2,16 @@
 \input{preamble}
 \input{../img/tools_tikz_figure}
 
- 
+
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{caption}[numbered]
- 
+
 \title[Tobar \& Chapel, Optimal Transport for Signal Processing]{Optimal Transport for Signal Processing \\ \vspace{1em} \large{\it A tutorial at MLSP 2024}
 }
 \author[]{Felipe Tobar\inst{1} \and Laetitia Chapel\inst{2}}
 \institute[]{\inst{1} Initiative for Data \& Artificial Intelligence, Universidad de Chile \and \inst{2} IRISA, Obelix team, Institut Agro Rennes-Angers}
 
-\date{22 September, 2024} 
+\date{22 September, 2024}  
 
 
 \begin{document}
@@ -60,8 +60,10 @@ IRISA Lab, France\\
 \vspace{1em}
 \bred{Forenote on implementation}
 \begin{itemize}
-    \item Examples in this tutorial are based on \bblue{POT: Python Optimal Transport Toolbox}
-    \item Available here \href{https://pythonot.github.io/}{\texttt{pythonot.github.io}}
+    \item Examples based on \bblue{POT: Python Optimal Transport Toolbox} (\href{https://pythonot.github.io/}{\texttt{pythonot.github.io}})
+    \item Tutorial repository: \bblue{ 
+    \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/}{\texttt{github.com/felipe-tobar/OT-tutorial-MLSP-2024}}
+    }
 \end{itemize}
 \end{frame}
 
@@ -156,9 +158,9 @@ De l'Imprimerie Royale.}}
     \bred{Solve:} 
  Optimise the total transport cost
     \begin{equation}
-        \sum_{x\in\cX} c(x_i, T(x_i))
+        \OT{(\mu,\nu)} = \min_{T\in M_{X,Y}}\sum_{x\in\cX} c(x_i, T(x_i)),
     \end{equation}
-    over $M_{X,Y} = \{ T: \cX \to \cY,\ s.t.,\ T_{\#\mu}=\nu \}$.
+     where $M_{X,Y} = \{ T: \cX \to \cY,\ s.t.,\ T_{\#\mu}=\nu \}$.
 \end{minipage}   
 \hfill
 \begin{minipage}[t]{0.3\textwidth}
@@ -293,7 +295,7 @@ De l'Imprimerie Royale.}}
     \end{figure}
 \end{frame} 
 
-\begin{frame}{Transport plan} 
+\begin{frame}{Transport \emph{plan}} 
 \begin{textblock}{0.35}(0.72,0.02)
      \begin{figure}
         \includegraphics[width=0.6\textwidth]{../img/wine_assignment_split.pdf}
@@ -301,7 +303,7 @@ De l'Imprimerie Royale.}}
 \end{textblock}
 
 \begin{equation*}
-    \inf_{P\in\Pi_{\mu,\nu}} \langle P , C\rangle = \sum_{i,j}^{n,m} C_{ij}P_{ij} 
+    \hspace{-2em}\OT{(\mu,\nu)} = \inf_{P\in\Pi_{\mu,\nu}} \langle P , C\rangle = \sum_{i,j}^{n,m} C_{ij}P_{ij} 
 \end{equation*}
 where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in {[0,1]}^{m\times n} :  \sum_{i=1}^m P_{ij} = \nu_j,  \sum_{j=1}^n P_{ij} = \mu_i \}$
     \begin{figure}
@@ -382,20 +384,20 @@ where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in {[0,1]}^{m\times n} :  \sum
 
 \begin{frame}{Dual formulation}
 
-Recall the primal formulation: $OT({\mu},{\nu}) = \inf _{\pi\in\Pi(\mu,\nu)} \iint c(x,y)\d\pi(x,y)$
+Recall the primal formulation: $\OT({\mu},{\nu}) = \inf _{\pi\in\Pi(\mu,\nu)} \iint c(x,y)\d\pi(x,y)$
 \begin{block}{}
-$$OT({\mu},{\nu}) = \sup_{(\phi,\psi)\in\Phi_c} \left(\int_{\XX} \phi d{\mu} + \int_{\XX} \psi d{\nu}\right)$$
+$$\OT({\mu},{\nu}) = \sup_{(\phi,\psi)\in\Phi_c} \left(\int_{\XX} \phi d{\mu} + \int_{\XX} \psi d{\nu}\right),$$
 where
-$$\Phi_c : = \left\{(\phi,\psi)\in L_1(\mu)\times L_1(\nu)\ \mbox{s.t.}\ \phi(x) + \psi(y)\leq c(x,y)\right\}$$
+$$\Phi_c : = \left\{(\phi,\psi)\in L_1(\mu)\times L_1(\nu),\ \mbox{s.t.}\ \phi(x) + \psi(y)\leq c(x,y)\right\}.$$
 \end{block}
 
-\visible<2-3>{\vspace{0.3cm}\begin{itemize}
-\item[$\bullet$] $\phi$ and $\psi$ are scalar function also known as Kantorovich potentials
-\item[$\bullet$] Primal dual relationship : the support of $\pi\in\Pi^{\ast}(\mu,\nu)$, that is $\pi(x,y)$ is where $\phi(x)+\psi(y) = c(x,y)$.
+{\vspace{0.3cm}\begin{itemize}
+\item[$\bullet$] $\phi$ and $\psi$ are scalar function also known as \bblue{Kantorovich potentials}
+\item[$\bullet$] Primal-dual relationship: the support of $\pi\in\Pi^{\ast}(\mu,\nu)$ is such that $\phi(x)+\psi(y) = c(x,y)$.
 \end{itemize}}
 
-\visible<3>{\vspace{0.3cm} In the discrete setting:
-$$\int_{\XX} \phi d\left({\sum_{i=1}^na_i\delta_{x_i}}\right) + \int_{\XX} \psi d\left({\sum_{j=1}^mb_j\delta_{y_i}}\right) = \sum_{i=1}^na_i\underbrace{\phi(x_i)}_{\alpha_i} + \sum_{j=1}^mb_j\underbrace{\psi(y_j)}_{\beta_j}$$
+{\vspace{0.3cm} In the discrete setting:
+$$\int_{\XX} \phi d\left({\sum_{i=1}^n\mu_i\delta_{x_i}}\right) + \int_{\XX} \psi d\left({\sum_{j=1}^m\nu_j\delta_{y_i}}\right) = \sum_{i=1}^n\mu_i\underbrace{\phi(x_i)}_{\alpha_i} + \sum_{j=1}^m\nu_j\underbrace{\psi(y_j)}_{\beta_j}$$
 and $\Phi_c$ becomes $\{(\alpha,\beta)\in\R^n\times\R^m \ \mbox{s.t.}\ \alpha_i+\beta_j\leq c(x_i,y_j)\}$
 }
 
@@ -403,8 +405,8 @@ and $\Phi_c$ becomes $\{(\alpha,\beta)\in\R^n\times\R^m \ \mbox{s.t.}\ \alpha_i+
 
 
 
-\begin{frame}{Informal way of interpreting Kantorovich duality principle for the discrete case}
-$$OT({\mu},{\nu}) = \underset{\pi\in\Pi(\er{a},\eb{b})}{\min} \langle C, \pi \rangle = \max_{(\alpha,\beta)\in D_c} \ \langle \alpha,{a}\rangle + \langle \beta, {b}\rangle$$
+\begin{frame}{Interpretation of Kantorovich duality (discrete)}
+$$\OT({\mu},{\nu}) = \underset{\pi\in\Pi(\mu,\nu)}{\min} \langle C, \pi \rangle = \max_{(\alpha,\beta)\in D_c} \ \langle \alpha,{\mu}\rangle + \langle \beta, {\nu}\rangle$$
 with
 $$D_c := \{(\alpha,\beta)\in\R^n\times\R^m \ \mbox{such that}\ \forall (i,j)\in\{1,\ldots,n\}\times\{1,\ldots,m\}, \alpha_i+\beta_j\leq C_{ij}\}$$
 
@@ -415,11 +417,11 @@ $$D_c := \{(\alpha,\beta)\in\R^n\times\R^m \ \mbox{such that}\ \forall (i,j)\in\
 \end{frame}
 
 
-\begin{frame}{Intuition from Caffarelli : the shipper's problem}
-One vendor comes and sets her principle:
+\begin{frame}{Intuition: the shipper's problem}
+One vendor sets the following:
 \begin{itemize}
-\item[$\bullet$] $\alpha_i$ = price for \textbf{loading} a unit of coal at place $\er{x_i}$ (no matter where it goes)
-\item[$\bullet$] $\beta_j$ = price for \textbf{unloading} a unit of coal at place $\eb{y_j}$ (no matter from which mines it comes from)
+\item[$\bullet$] $\alpha_i$ = price for \textbf{loading} a kilo of grapes at place $\er{x_i}$ (no matter which plan it goes)
+\item[$\bullet$] $\beta_j$ = price for \textbf{unloading} a kilo of grapes at place $\eb{y_j}$ (no matter from which vineyard it came from)
 \end{itemize}
 
 \begin{center}
@@ -428,21 +430,24 @@ One vendor comes and sets her principle:
 
 \end{frame}
 
-\begin{frame}{Intuition from Caffarelli : the shipper's problem}
+\begin{frame}{Intuition: the shipper's problem}
 
 \begin{itemize}
-\item[$\bullet$] There are exactly $\er{a_i}$ units at mine $\er{x_i}$ and $\eb{b_j}$ needed at factory $\eb{y_j}$; the vendor asks the price (that she wants to maximize!)
-$$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
+\item[$\bullet$] There are exactly $\er{\mu_i}$ units at vineyard $\er{x_i}$ and $\eb{\nu_j}$ needed at plant $\eb{y_j}$; the vendor asks the price \bblue{(that she wants to maximize!)}
+$$\langle\alpha, \er{\mu}\rangle + \langle\beta, \eb{\nu}\rangle$$
 \visible<2-6>{\item[$\bullet$] Negative price are allowed !}
-\visible<3-6>{\item[$\bullet$] Does the vendor have a competitive offer? Her pricing scheme implies that transferring one unit of coal from mine ${x_i}$ to factory $\eb{y_j}$ costs exactly $\alpha_i+\beta_j$.}
-\visible<4-6>{\item[$\bullet$] Recall the primal problem : the cost of shipping one unit from ${x_i}$ to ${y_j}$ is $C_{i,j}$.}
-\visible<5-6>{\item[$\bullet$] Good deal for the driver implies $\alpha_i+\beta_j\leq C_{ij}$.}
-\visible<6>{\item[$\bullet$] the driver checks that the vendor's proposition is a better deal:
+\visible<3-6>{\item[$\bullet$] Does the vendor have a competitive offer? Her pricing scheme implies that transferring one kilo of grapes from vineyard $\er{x_i}$ to plant $\eb{y_j}$ costs exactly $\alpha_i+\beta_j$.}
+\visible<4-6>{\item[$\bullet$] \blue{Recall the primal problem:} the cost of shipping one unit from ${x_i}$ to ${y_j}$ is $C_{i,j}$.}
+\visible<5-6>{\item[$\bullet$] Feasible deal for the vendor requires that  $\alpha_i+\beta_j\leq C_{ij}$.}
+\visible<6>{\item[$\bullet$] The winery checks that the vendor proposition is a better deal by
 \begin{align*}
-\sum_{i,j} \pi_{ij}C_{ij}\geq \sum_{i,j} \pi_{ij}(\alpha_j+\beta_j) &= \left(\sum_i\alpha_i\sum_j\pi_{ij}\right) + \left(\sum_j\beta_j\sum_i\pi_{ij}\right)\\
-& = \langle\alpha, a\rangle + \langle\beta, b\rangle
-\end{align*}}
+\sum_{i,j} \pi_{ij}C_{ij}\geq \sum_{i,j} \pi_{ij}(\alpha_j+\beta_j) &= \left(\sum_i\alpha_i\sum_j\pi_{ij}\right) + \left(\sum_j\beta_j\sum_i\pi_{ij}\right)= \langle\alpha, \mu\rangle + \langle\beta, \nu\rangle
+\end{align*}}.
 \end{itemize}
+\visible<6>{
+    \bblue{Critically, when $c(x,y) = |x-y|$,  $\alpha = -\beta$, therefore $\OT(\mu,\nu) = \max_\alpha \langle\alpha, \mu\rangle - \langle\alpha, \nu\rangle$}
+}
+
 
 \end{frame}
 
