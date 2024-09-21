@@ -446,14 +446,52 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
 
 
 
-\begin{frame}{\bred{Example 5:} Wasserstein GANs}
-\bblue{Recall: GANs}
 
+\begin{frame}{\bred{Example 5:} Wasserstein GANs}
+
+
+\begin{textblock}{0.45}(0.65,0.12)
+\bblue{\large Recall (standard) GANs}
+\end{textblock}
+\vspace{-2em}
     \begin{figure}
         \centering
-            \includegraphics[width=0.9\textwidth]{../img/gan_diag.pdf}
+            \includegraphics[width=0.7\textwidth]{../img/gan_diag.pdf}
         \end{figure}
+\bred{Notice the remarkable similarity between the objectives of the (dual) OT formulation and GANs}
+\end{frame}
 
+\begin{frame}{\bred{Example 5:} Wasserstein GANs}
+\framesubtitle{GANs vs WGANs: Implementation details}
+
+\begin{minipage}{0.32\textwidth}
+    \begin{itemize}
+        \item Discriminator loss no longer a likelihood fn 
+        \item Optimised with RMSProp
+        \item Loss for $D$ and $G$ have the same form (Kantorovich potential, $p=1$)
+        \item Discriminator's inner loop training $n_\text{critic}$ no longer equal to 1
+        \item Learned parameters are clipped to ensure $||f||_L=1$
+    \end{itemize}
+\end{minipage}
+\begin{minipage}{0.32\textwidth}
+        \begin{figure}
+        \centering
+            \includegraphics[width=0.95\textwidth]{../img/gan_mnist.pdf}
+            \centerline{\bblue{GAN}}
+        \end{figure}
+\end{minipage}
+\begin{minipage}{0.32\textwidth}
+            \begin{figure}
+        \centering
+            \includegraphics[width=0.95\textwidth]{../img/wgan_mnist.pdf}
+            \centerline{\bred{W}\bblue{GAN}}
+        \end{figure}
+\end{minipage}
+\begin{textblock}{0.45}(0.45,0.5)
+    \bred{
+    \underline{
+        Notebooks: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/gan.ipynb}{gan.ipynb} \& \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/wgan.ipynb}{wgan.ipynb} 
+    }}\end{textblock}
 
 \end{frame}
 
@@ -482,7 +520,11 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
         \end{equation*}
         where the moving cost $c(x, y) = {d(x, y)}^p = \| x - y \|^p$.\\
         It is often depicted as an ``horizontal'' distance
-        
+\begin{itemize}
+          \item[\bred{$\checkmark$}] \bblue{symmetry}
+          \item[\bred{$\checkmark$}] \bblue{identity of indiscernibles} 
+          \item[\bred{$\checkmark$}] \bblue{triangular inequality}
+      \end{itemize}       
     \end{minipage}
     \hfill
     \begin{minipage}{0.4\textwidth}
@@ -502,10 +544,9 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
 \end{frame}
 
 \begin{frame}{The Wasserstein distance}
-
     \begin{itemize}
-        \item Does not need overlapping support
-        \item Tells if the distributions are different, and also how much they are different!
+        \item Does not need overlapping support (as KL)
+        \item Determines the \emph{degree of dissimilarity} between distributions
     \end{itemize}
     \begin{figure}
         \centering
@@ -515,18 +556,31 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
         \small
     \bred{
     \underline{
-        Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Horizontal distance.ipynb}{Horizontal distance.ipynb}
+        Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wasserstein_distance.ipynb}{Wasserstein\_distance.ipynb}
     }}
 
 \end{frame}
 
-\begin{frame}{The Wasserstein space}
+\begin{frame}{On the suitability of $W_p$ for learning}
+
+\begin{itemize}
+    \item Thus far we have referred to \emph{spaces of probability functions}, but we are interested in applying $W_p$ on spaces of \bred{generative models}.
+    \item Learning is such a space requires, more than a distance, a notion of \bred{convergence}
+    \item Consider $\mu_\text{data}$ to be the true data distribution. We want to find a model $(P_\theta)_{\theta\in\Theta}$ such that $P_\theta \to \mu_\text{data}$, or equivalently, $D(\mu_\text{data},P_\theta)\to 0$ --- for a \bblue{reasonable} distance $D$.
+\end{itemize}
+\vspace{2em}
+\centerline{\bblue{Discussion:} Consider $\delta_{x_0}$ and $\delta_{x_i}, x_i\to x_0$}
+
+\end{frame}
+
+
+
+\begin{frame}{\bred{Example 6:} Gradient flows on Wasserstein space}
     \bblue{Wasserstein space $\mathbb{W}_p$:} space endowed with the distance $W_p$
     \begin{itemize}
-        \item In the space $\mathbb{W}_p(\mathbb{R}^d)$, we have $W_p(\mu_n, \mu) \to 0$ iff $\mu_n \to \mu$
-        \item In the space $\mathbb{W}_p(\mathbb{R}^d)$, if we have $\mu_n \to \mu$ then $W_p(\mu_n, \mu) \to 0$ 
+        \item In the space $\mathbb{W}_p(\mathbb{R}^d)$, we have $W_p(\mu_n, \mu) \to 0$ iff $\mu_n \to \mu$ (weak topology)
     \end{itemize}
-    \bblue{Example} of a gradient flow on the support of a distribution that minimize $W_2^2(\mu_t, \mu)$:
+    \bblue{Consider the loss $W_2^2(\mu_t, \mu)$.} The figure below shows how a distribution $\mu_0$ evolves under de application of gradient flow of this loss.
     \begin{figure}
         \centering
             \only<1>{\includegraphics[trim={2cm 2cm 2cm 2.5cm},clip, width=0.6\textwidth]{../img/GF_init.pdf}}
@@ -544,7 +598,7 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
 
 
 
-\begin{frame}{Geodesic properties}
+\begin{frame}{Geodesic paths between distributions}
     \begin{minipage}{0.59\textwidth}
     A geodesic generalizes the concept of a straight line between two points\\
     \begin{figure}
@@ -566,16 +620,16 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
             \centering
                 \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=1\textwidth]{../img/geodesic_Euc_1d.pdf}
             \end{figure}
-        \centering
+\end{minipage}
+
+\vspace{2em}
         \small
-    \bred{
-    \underline{
+\bred{\underline{
         Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wasserstein Geodesics.ipynb}{Wasserstein Geodesics.ipynb}
     }}
-\end{minipage}
 \end{frame}
 
-\begin{frame}{Geodesic properties}
+\begin{frame}{Geodesic properties of the Wasserstein space}
     \begin{minipage}{0.59\textwidth}
     $\mathbb{W}_p$ is a \bred{geodesic space}
     \begin{itemize}
@@ -585,7 +639,6 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
         \end{equation*} 
         \item It represents the shortest path (on the Wasserstein space $\mathbb{W}_p$) between $\mu_1$ and $\mu_2$
         \item Allows ``horizontal'' interpolation between the distributions
-        \item \emph{there is an animation on the notebook + also for the L2 interpolation!}
     \end{itemize}
 \end{minipage}
 \hfill
@@ -594,13 +647,13 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
         \centering
             \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=1\textwidth]{../img/geodesic_1d.pdf}
         \end{figure}
-        \centering
+\end{minipage}
+
+\vspace{2em}
         \small
-    \bred{
-    \underline{
+\bred{\underline{
         Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wasserstein Geodesics.ipynb}{Wasserstein Geodesics.ipynb}
     }}
-\end{minipage}
 \end{frame}
 
 \begin{frame}{The Wasserstein barycenter}
