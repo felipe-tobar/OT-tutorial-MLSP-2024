@@ -124,6 +124,18 @@ simple%
 \usepackage{dsfont}
 
 
+\newcommand{\E}[2][]{
+   \ifthenelse{ \equal{#1}{} }
+      {\ensuremath{\left\langle#2\right\rangle}}
+      {\ensuremath{\left\langle#2\right\rangle_{#1}}}
+}
+
+\newcommand{\cov}[2][]{
+    \ifthenelse{ \equal{#1}{} }
+        {\operatorname{cov}\parens*{#2}}
+        {\operatorname{cov}_{#1}\parens*{#2}}
+}
+
 %Felipe's packages
 
 
@@ -148,6 +160,7 @@ simple%
 \def\MVN{{\text{MVN}}}
 \def\GP{{\mathcal {GP}}}
 \def\y{{\mathbf{y}}}
+\DeclareMathOperator{\OT}{OT}
 \def\t{{\mathbf{t}}}
 \def\x{{\mathbf{x}}}
 \def\xizi{ \xi_0^{(i)} }
@@ -173,7 +186,10 @@ simple%
 \newcommand{\GSK}[1]{\operatorname{GSK}\left(#1\right)}
 \newcommand{\GSKN}[1]{\operatorname{GSK}_N\left(#1\right)}
 \DeclareMathOperator\supp{supp}
-\DeclareMathOperator{\argmin}{argmin}
+\def\argmin{\mathop{\rm arg \; min}\limits}%
+\def\diag{\mathop{\rm diag}\nolimits}%
+%\let\leq=\leqslant
+%\let\geq=\geqslant
 %colours
 \definecolor{navy}{HTML}{000080}
 \providecommand{\rbullet}{{\textcolor{red}{{\bf \bullet}}}}

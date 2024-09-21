@@ -2,10 +2,10 @@
 \input{preamble}
 \input{../img/tools_tikz_figure}
 
-
+ 
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{caption}[numbered]
-
+ 
 \title[Tobar \& Chapel, Optimal Transport for Signal Processing]{Optimal Transport for Signal Processing \\ \vspace{1em} \large{\it A tutorial at MLSP 2024}
 }
 \author[]{Felipe Tobar\inst{1} \and Laetitia Chapel\inst{2}}
@@ -66,8 +66,15 @@ IRISA Lab, France\\
 \end{frame}
 
 
-\begin{frame}{Why Optimal Transport}
-    State main advantages and show applications in different fields. Emphasis on why OT and not other techniques
+\begin{frame}{Why Optimal Transport?}
+    \begin{itemize}
+        \item Need for a \bblue{meaningful} measure of distance between probability measures
+        \item Probability distributions are ubiquitous in machine learning and signal processing
+        \item Lots of applications in MLSP
+    \end{itemize}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{../img/applications}  
+    \end{figure}    
 \end{frame}
 
 
@@ -87,9 +94,6 @@ How to transport a pile of sand onto a hole in an optimal way?
 \end{frame}
 
 
-\begin{frame}{Brief history of OT}
-    From Monge to today
-\end{frame}
 
 \section{Part I: The Optimal Transport Problem}
 
@@ -100,19 +104,18 @@ How to transport a pile of sand onto a hole in an optimal way?
 
 
 
-\begin{frame}{Intuition}
-    \begin{figure}
-        \includegraphics[height=0.7\textheight]{../img/wine.png}  
-    \end{figure}
-    Motivation: vineyards transporting grapes from harvest site to processing plants
+{
+\usebackgroundtemplate{\includegraphics[width=\paperwidth]{../img/wine.png}}
+\begin{frame}[plain]
 \end{frame}
+}
+
 
 
 \begin{frame}{The assigment problem}
     \begin{figure}
         \includegraphics[height=0.7\textheight]{../img/wine_assignment.pdf}  
     \end{figure}
-    Build the assignment problem from intuition. Use the above figure to explain all possible ways to assign: straight lines, what's the cost, \emph{cheapest transport}. 
 \end{frame}
 
 \begin{frame}{The assigment problem: encoding real-world}
@@ -495,6 +498,76 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
 
 \end{frame}
 
+\begin{frame}{Solving discrete OT}
+
+Let $\er{\mu}=\sum_{i=1}^n\delta_{x_i}$ and $\eb{\nu}=\sum_{j=1}^m\delta_{y_j}$
+\begin{block}{}
+$$\pi^\ast \in \underset{\pi\in\Pi(\er{a},\eb{b})}{\argmin} \ \langle C, \pi \rangle$$
+\end{block}
+
+\visible<2-3>{\vspace{0.3cm}\begin{itemize}
+\item[$\bullet$] It's a linear problem : it can be rewritten in a vectorial form $\min_{t\geq 0} F(t) = c^Tt$
+\item[$\bullet$] It has linear constraint $\pi\mathds{1}_m =\er{a}$ and $\pi^T\mathds{1}_n=\eb{b}$
+\end{itemize}
+\vspace{0.1cm}$\Longrightarrow$ Linear problem + linear constraints ($(n+m)\times nm$ matrix) : solved in $\mathcal{O}(n^3\log(n))$ times}
+
+\visible<3>{\vspace{0.3cm}$\Longrightarrow$ Need for solvers that provide approximate solutions! See [Peyré et Cuturi 2019]}
+\end{frame}
+
+\begin{frame}{Regularization of OT}
+\begin{block}{}
+$$\pi_{\varepsilon} = \argmin_{\pi\in\R^{n\times m}_+} \ \langle C,\pi\rangle + \varepsilon\ \Omega(\pi)$$
+\end{block}
+
+\vspace{0.2cm}Advantages of regularizing the optimization problem:
+\begin{itemize}
+\item[$\bullet$] Fast algorithms to solve the OT problem.
+\item[$\bullet$] Encode prior knowledge on the data.
+\item[$\bullet$] For statistical purposes : smooth the distance estimation
+\item[$\bullet$] Better posed problem (convexity, stability).
+\end{itemize}
+
+\visible<2>{\vspace{0.2cm}Regularization terms :
+\begin{itemize}
+\item[$\bullet$] Entropic regularization \cite{sinkhorn_lightspeed}
+\item[$\bullet$] KL, Itakura Saito, $\beta$-divergences, \cite{dessein2018regularized}
+\end{itemize}}
+
+\end{frame}
+
+\begin{frame}{Entropy regularized OT \cite{sinkhorn_lightspeed}}
+Adding regularization to the original problem turns the dual computation to an \textbf{unconstrained problem} !
+
+$$\OT(\er{\mu},\eb{\nu}) = \min_{\pi\in\Pi(a,b)} \ \langle C,\pi\rangle + \varepsilon \sum_{i,j} \pi_{ij}\log(\pi_{ij})$$
+
+The Lagrangian of the optimization problem is 
+$$\LL(\pi,\alpha,\beta) = \sum_{ij}\pi_{ij}C_{ij} + \varepsilon \pi_{ij}(\log(\pi_{ij})-1) + \alpha^T(a-\pi\mathds{1}_m) + \beta^T(b-\pi^T\mathds{1}_n)$$
+Then, by 1st order condition, we get
+$$C_{ij} +\varepsilon\log(\pi_{ij})+\alpha_i + \beta_j= 0$$
+leading to 
+$$\OT(\er{\mu},\eb{\nu}) = \max_{\alpha,\beta} \ \alpha^T\er{a} + \beta^T\eb{b} -\frac{1}{\varepsilon}\exp\left(\frac{\alpha}{\varepsilon}\right)^T \K\exp\left(\frac{\beta}{\varepsilon}\right)$$
+with $\K = \exp\left(-\frac{C}{\varepsilon}\right)$.
+\end{frame}
+
+
+\begin{frame}{Entropy regularized OT \cite{cuturi2013fast}}
+\begin{block}{}
+The solution of 
+$$\OT(\er{\mu},\eb{\nu}) = \min_{\pi\in\Pi(a,b)} \ \langle C,\pi\rangle + \varepsilon \sum_{i,j} \pi_{ij}\log(\pi_{ij})$$
+is of the form
+$$\pi_\varepsilon^* = \diag(u)\exp\left(-\frac{C}{\varepsilon}\right)\diag(v)$$
+\end{block}
+
+\visible<2>{\vspace{0.3cm}\begin{itemize}
+\item[$\bullet$] From Sinkhorn theorem \cite{sinkhorn1964relationship}, we get that $\diag(u)$ and $\diag(v)$ exist and are unique.
+\item[$\bullet$] Sinkhorn-Knopp algorithm \cite{knight2008sinkhorn} allows to solve it efficiently
+\end{itemize}}
+\end{frame}
+
+
+
+
+
 
 \section{Part II: The Wasserstein distance}
 
@@ -656,12 +729,339 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
     }}
 \end{frame}
 
+
+
+
+\begin{frame}{\red{Motivation:} Applying the Wasserstein distance to time series}
+Two cosine signals with frequencies $1$ and $3$.
+\begin{figure}
+\includegraphics[width=0.7\textwidth]{../img/cosinus.pdf}
+\end{figure}
+The associated PSD functions .  
+ 
+\centering
+\begin{tikzpicture}[scale=0.6]
+\makeatletter
+\begin{axis}[axis lines=middle,xmin=-3.3,xmax=3.3,ymin=-0.5,ymax=1]
+\addplot +[dirac, color = blue] coordinates {(-3,0.5) (3,0.5)};
+\addplot +[dirac, color = red] coordinates {(-1,0.5) (1,0.5)};
+\end{axis}
+
+\draw [black,thick] (8,4) -- (12,5); 
+\draw (12,5) node[right]{$\L_2=1/\sqrt{2}$};
+\draw [black,thick] (8,2) -- (12,1);
+\draw (12,1) node[right]{$W_2=2$};
+\end{tikzpicture}
+\end{frame}
+
+
+
+
+\begin{frame}{\red{Definition:} The Wasserstein-Fourier distance}
+\thispagestyle{empty}
+\begin{definition}
+For two signals $x$ and $y$ belonging to two different classes of time series, we denote by
+\begin{itemize}
+\item[$\bullet$] $[x]$ and $[y]$ their respective class
+\item[$\bullet$] $s_x$ and $s_y$ their respective NPSD
+\end{itemize}
+We define the proposed \textit{Wasserstein-Fourier} (WF) distance:
+$$\WF{x}{y}=W_2(s_x,s_y).$$
+\end{definition}
+
+\begin{theorem}
+WF is a distance over the space of equivalence classes of time series
+sharing the same NPSD.
+\end{theorem}
+\vfill
+
+\noindent \tiny E. Cazelles, A. Robert \& \textbf{F. Tobar}, The Wasserstein-Fourier Distance for Stationary Time Series. \emph{IEEE Trans.~on Signal Processing} 2021
+
+\end{frame}
+
+\begin{frame}{Basics properties of the WF distance}
+    Time shifting : $x(t)=y(t-t_0)$.\\
+    \begin{minipage}[c]{0.2\linewidth}
+        \begin{figure}
+            \includegraphics[scale=0.22]{../img/time_shift.pdf}
+        \end{figure}
+    \end{minipage}\hspace{4cm}
+    \begin{minipage}[c]{0.4\linewidth}
+        $$\WF{x}{y}=0$$
+    \end{minipage}
+
+    Time scaling : $x(t)=y(at), a>0$.\\
+    \begin{minipage}[c]{0.2\linewidth}
+        \begin{figure}
+            \includegraphics[scale=0.22]{../img/time_scaling.pdf}
+        \end{figure}
+    \end{minipage}\hspace{4cm}
+    \begin{minipage}[c]{0.4\linewidth}
+        $$\WF{x}{y}=\vert a-1\vert(\E{\vert Y\vert^2}_{s_y})^{\frac{1}{2}}$$
+    \end{minipage}
+
+    Frequency shifting : $x(t)=e^{2i\pi\xi_0t}y(t)$.\\
+    \begin{minipage}[c]{0.2\linewidth} 
+        \begin{figure}
+            \includegraphics[scale=0.22]{../img/freq_shift.pdf}
+        \end{figure}
+    \end{minipage}\hspace{4cm} 
+        \begin{minipage}[c]{0.4\linewidth}
+            $$\WF{x}{y}=\vert \xi_0\vert$$
+        \end{minipage}
+\end{frame}
+
+
+\begin{frame}{How to interpolate two time series?}
+\textbf{The usual $\L_2$ path:} a superposition of two signals
+$$x_{\gamma}(t)=\gamma \red{x_1(t)}+(1-\gamma)\blue{x_2(t)}, \quad \gamma\in [0,1],$$
+\textbf{Example:} For EEG, the $\L_2$ average of multiple responses to a common stimulus would probably convey little information about the true average response and it is likely to quickly vanish due to the random phases.
+
+\uncover<2->{   \textbf{Toy example: \uncover<8->{\red{The WF path i.e. Wasserstein interpolation in the frequency domain}}}
+
+\begin{minipage}[c]{0.3\linewidth}
+\begin{figure}
+\begin{tikzpicture}
+\draw [black] (0,2.5) node[above]{Time domain};
+\only<2>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/interp_both.pdf}};}
+\only<3>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/eucli0.pdf}};}
+\only<4>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/eucli1.pdf}};}
+\only<5>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/eucli2.pdf}};}
+\only<6>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/eucli3.pdf}};}
+\only<7>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/eucli4.pdf}};}
+\only<8>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/interp_both.pdf}};}
+\only<9>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/wass0.pdf}};}
+\only<10>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/wass1.pdf}};}
+\only<11>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/wass2.pdf}};}
+\only<12>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/wass3.pdf}};}
+\only<13>{\draw (0,-0.3) node[above]{\includegraphics[scale=0.25]{../img/wass4.pdf}};}
+\end{tikzpicture}
+\end{figure}
+\end{minipage}\hspace{3.5cm}
+\begin{minipage}[c]{0.3\linewidth}
+\begin{tikzpicture}[scale=0.5]
+\only<3>{\draw [blue] (0,4.4) node[above]{$\gamma=0$};}
+\only<4>{\draw [color1] (0,4.4) node[above]{$\gamma=0.25$};}
+\only<5>{\draw [color2] (0,4.4) node[above]{$\gamma=0.5$};}
+\only<6>{\draw [color3] (0,4.4) node[above]{$\gamma=0.75$};}
+\only<7>{\draw [red] (0,4.4) node[above]{$\gamma=1$};}
+\only<9>{\draw [blue] (0,4.4) node[above]{$\gamma=0$};}
+\only<10>{\draw [color1] (0,4.4) node[above]{$\gamma=0.25$};}
+\only<11>{\draw [color2] (0,4.4) node[above]{$\gamma=0.5$};}
+\only<12>{\draw [color3] (0,4.4) node[above]{$\gamma=0.75$};}
+\only<13>{\draw [red] (0,4.4) node[above]{$\gamma=1$};}
+\uncover<8->{\draw [black] (3,6) node[above]{Frequency domain};
+\makeatletter
+\begin{axis}[axis lines=middle,xmin=-5.3,xmax=5.3,ymin=-0.2,ymax=1]
+\only<8>{\addplot +[dirac, color = blue] coordinates {(-5,0.5) (5,0.5)};
+\addplot +[dirac, color = red] coordinates {(-1,0.5) (1,0.5)};}
+\only<9>{\addplot +[dirac, color = blue] coordinates {(-5,0.5) (5,0.5)};}
+\only<10>{\addplot +[dirac, color = color1] coordinates {(-4,0.5) (4,0.5)};}
+\only<11>{\addplot +[dirac, color = color2] coordinates {(-3,0.5) (3,0.5)};}
+\only<12>{\addplot +[dirac, color = color3] coordinates {(-2,0.5) (2,0.5)};}
+\only<13>{\addplot +[dirac, color = red] coordinates {(-1,0.5) (1,0.5)};}
+\end{axis}}
+\end{tikzpicture}
+\end{minipage}
+}
+\end{frame}
+
+\begin{frame}{An interpolation path between two times series}
+\begin{tikzpicture}
+\draw [blue] (0.8,0) node[above]{Time domain};
+\draw [blue] (7.5,0) node[above]{Frequency domain};
+\draw [blue, dashed, line width=0.8pt] (2.8,0.5) -- (2.8,0);
+\draw [blue, dashed, line width=0.8pt] (2.8,-0.9) -- (2.8,-2.9);
+\draw [blue, dashed, line width=0.8pt] (2.8,-3.8) -- (2.8,-6.8); 
+
+\draw [purple] (0.8,-1.5) node[above]{\CVI{$x_1,x_2$}};
+\draw (1,-5.5) node[above]{\begin{minipage}[c]{0.28 \linewidth}
+\CM{$(x_{\gamma})_{\gamma\in[0,1]}$}
+
+Interpolant between\\ \CVI{$x_1$} and \CVI{$x_2$}
+\end{minipage}};
+
+\draw [black] (2.9,-0.6) node[above]{NPSD};
+\draw [->] [black, thick,rounded corners=10pt] (1.2,-1) to[bend left=25] (4.5,-1.1);
+\draw [->] [black, thick,rounded corners=10pt] (5.5,-1.6) to[bend left=20] (6.8,-4.2);
+
+\draw [black] (3.2,-3.5) node[above]{Inverse Fourier transform};
+\draw [->] [black, thick,rounded corners=10pt] (6,-4.2) to[bend right=20] (1.2,-4);
+
+
+\draw [blue] (5,-1.7) node[above]{\red{$s_1, s_2$}};
+\draw (9,-0.5) node[below]{\begin{minipage}[c]{0.4 \linewidth}
+McCann's interpolant (or constant-speed geodesic, Ambrosio et. al (2008)) \CO{$(g_{\gamma})_{\gamma\in [0,1]}$} between \red{$s_1$} and \red{$s_2$}.
+\end{minipage}};    
+
+\draw (8.8,-4) node[below]{\begin{minipage}[c]{0.7 \linewidth}
+$$\CO{g_{\gamma} = p_{\gamma}\#\pi^{\ast}}, \gamma\in[0,1]$$
+\begin{itemize}
+\item[$\bullet$] $p_{\gamma}(u,v) = (1-\gamma)u+\gamma v$, for $u, v\in\R$
+\item[$\bullet$] $\pi^{\ast}$ optimal transport plan between \red{$s_1$} and \red{$s_2$}
+\item[$\bullet$] $\# =$ pushforward operator
+\end{itemize}
+\end{minipage}};
+\end{tikzpicture}
+\end{frame}
+
+
+
+\begin{frame}{Example: interpolation for the \emph{C. Elegans} database}
+\begin{figure}
+\centering
+\includegraphics[width=0.475\textwidth]{../img/worms_geodesic_sameclass.pdf}
+\includegraphics[width=0.475\textwidth]{../img/worms_euclidean_sameclass.pdf}
+  {10-step interpolation $(x_{\gamma})_{\gamma\in [0,1]}$ between two signals from the {\em C.~elegans} database using the proposed WF distance (top) and the Euclidean distance (bottom): the true signals are shown in solid blue and red, while the interpolations are colour-coded with respect to $\gamma$.}
+\end{figure}
+\end{frame}
+
+
+
+
+\begin{frame}{Logistic regression of time series}
+For two classes $C_0$ and $C_1$, one defines a binary classification of a sample $s$ as
+$$p(C_0\vert s)=\frac{1}{1+e^{-\red{\alpha}+\red{\beta} d(s,\bar{s_0})+\red{\gamma} d(s,\bar{s_1})}},$$
+where $d$ is a divergence $(\L_2, KL, W_2)$ and $\bar{s_i}$ sums up the information of class $C_i$.
+
+\begin{itemize}
+\item[$\bullet$] $\L_2$ and $KL$ cases:
+$$\bar{s}\in \underset{s}{\argmin}\frac{1}{n}\sum_{i=1}^n\Vert s_i-s\Vert^2=\frac{1}{n}\sum_{i=1}^n s_i.$$
+\item[$\bullet$] $W_2$ case: a \textbf{Wasserstein barycenter} of a family $(s_i)_{i=1,\ldots,n}$ of distributions is given by
+$$\bar{s}\in \underset{s}{\argmin}\frac{1}{n}\sum_{i=1}^nW_2^2(s_i,s).$$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic regression of time series}
+\begin{figure}
+\includegraphics[trim={0 180 0 180},clip,width=1\textwidth]{../img/toy_example2.pdf}
+{Illustration of the linear separability made possible by the Wasserstein-Fourier distance.}
+\end{figure}
+\end{frame} 
+
+\begin{frame}{Real-world example: urban audio recordings\footnote{Urbansound8k dataset}}
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{p{2.5cm}p{2.5cm}p{2.5cm}p{2.5cm}} \toprule
+
+                    & $\mathcal{L}_{W_2}$          & $\mathcal{L}_{\L_2}$ & $\mathcal{L}_{KL}$         \\ \midrule 
+air conditioner     & \textbf{0.732} ($\pm0.072$)  & 0.718 ($\pm0.047$) & 0.650 ($\pm0.090$)           \\
+car horn            & 0.588 ($\pm0.077$)           & 0.743 ($\pm0.043$) & \textbf{0.790} ($\pm0.037$)  \\
+children playing    & \textbf{0.751} ($\pm0.027$)  & 0.685 ($\pm0.031$) & 0.736 ($\pm0.023$)           \\ \midrule
+dog bark            & \textbf{0.743} ($\pm0.040$)  & 0.720 ($\pm0.033$) & 0.728 ($\pm0.040$)           \\ 
+drilling            & \textbf{0.827} ($\pm0.027$)  & 0.826 ($\pm0.026$) & 0.817 ($\pm0.026$)           \\ 
+engine idling       & 0.767 ($\pm0.041$)           & 0.733 ($\pm0.051$) & \textbf{0.791} ($\pm0.042$)  \\ \midrule
+jackhammer          & 0.645 ($\pm0.087$)           & 0.585 ($\pm0.095$) & \textbf{0.669} ($\pm0.059$)  \\
+siren               & 0.803 ($\pm0.062$)           & 0.878 ($\pm0.034$) & \textbf{0.897} ($\pm0.034$)  \\
+street music        & 0.792 ($\pm0.030$)           & 0.782 ($\pm0.025$) & \textbf{0.812} ($\pm0.029$)  \\ \bottomrule
+\end{tabular}
+\vspace{1em}
+\caption{Classification results for the class \textit{gun shot} against the 9 remaining classes.}
+\end{table}
+\end{frame}
+
+
+\begin{frame}{Geodesic path for Gaussian processes}
+Gaussian process $\leftrightarrow$ Kernel $\leftrightarrow$ PSD.
+\begin{figure}
+\includegraphics[trim={0 150 0 150},clip,width=1\textwidth]{../img/sinc_gaus_sin2.pdf}
+\end{figure}
+\centering
+\bred{Our conjecture:} We can train GPs in this way\\
+\bred{Preliminary results:} For some PSD families, the cost is convex
+\end{frame}
+
+\begin{frame}[plain]{How Gaussian proceeses are trained}
+    \noindent\red{Covariance-based metrics}: Compute sample covariance and apply, e.g., $L_p$ distances. 
+    \begin{figure} 
+            \centering
+            %\includegraphics[width=0.8\textwidth]{figs/temporal_metric_diag.pdf}
+        \end{figure}
+
+     \noindent\red{Frequency-based metrics}: Compute \textbf{Periodogram} and use any density-based metric: KL, Bergamn, Itakura-Saito, and Wasserstein. 
+    
+        \begin{figure} 
+            \centering
+            \includegraphics[width=0.8\textwidth]{../img/spectral_metric_diag.pdf}
+        \end{figure}
+
+
+\end{frame}
+
+
+\begin{frame}[plain]{An interesting case}
+    Let us consider: 
+        \begin{itemize}
+        \item Metric: The \textit{Wasserstein} distance applied to the PSD, i.e., $W_2$ on $S=\fourier{K}$.
+        \item A Location-scatter family of PSD: $  \left\{S_{\mu,\sigma}(\xi) = \frac{1}{\sigma} S_{0,1} \left(\frac{\xi-\mu}{\sigma}\right), \mu\in\R,\sigma\in\R_+\right\}$ 
+    \end{itemize}
+    \begin{theorem} 
+\label{thm:convexWF}
+For a  location-scale family with prototype $S_{0,1}$, the minimiser of $W_2(S, S_{\mu,\sigma})$ is unique, given by 
+\begin{equation}
+  \mu^* = \int_0^1 Q(p)d p \qquad \mbox{and} \qquad
+  \sigma^* = \frac{1}{\int_0^1 Q_{0,1}^2(p)d p}\int_0^1 Q(p) Q_{0,1}(p)d p \label{eq:soln_mu_sigma}
+\end{equation}
+where $Q$ is the quantile function of $S$. The PSD $S$ does not need to be location-scale.
+\end{theorem}
+\red{Corollary:} Training a GP with the Wasserstein distance has a cost $\mathcal{O}(n)$
+\end{frame}
+
+
+
+
+\begin{frame}[plain]{Theoretical aspects}
+    \red{Does it converge?} I.e., is it true that
+    \begin{equation}
+        \theta_n^\star = \argmin D(\hat S_n, S_\theta) \xrightarrow[n \to \infty]{a.s.} \theta^\star = \argmin D(S, S_\theta)
+    \end{equation}
+    yes it is, provided that: 
+    \vspace{1em}
+    \begin{itemize}
+        \item \textbf{Metric.} $D$ is either the Wasserstein-$p$ or the $L_p$ distances with $p\in\{1,2\}$
+        \item \textbf{Estimator of PSD.} $D(\hat S_{n}, S)\xrightarrow [n\to \infty]{a.s.} 0$
+        \item \textbf{Identifiability.} $\theta_n\xrightarrow[n\to \infty]{} \theta \iff D(S_{\theta_n}, S_\theta)\to 0$; 
+        \item \textbf{Compactness.} the parameter space  $\Theta$ is compact.
+    \end{itemize}
+
+    \vspace{2em}
+    \flushright ** This applies to temporal (covariance) distances too
+
+
+\end{frame}
+
+
+
+
+\begin{frame}[plain]{OT-powered GP training: Linear complexity }
+
+\begin{itemize}
+    \item Computation time vs number of observations
+    \item Exact case ($W_2$ distance and location-scale family)
+    \item \textbf{Unevenly-sampled} observations from an single component SM kernel ($\mu=0.05, \sigma=0.01$) in the range $[0,1000]$
+    \item Compared against: ML estimate starting from the OT value (full GP, 100 iterations), and sparse GP using 200 pseudo inputs
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+  \includegraphics[width=0.7\textwidth]{../img/exp2.pdf}
+  \label{fig:comp_cost}
+\end{figure} 
+    
+\end{frame}
+
+
+
+
+
 \begin{frame}{The Wasserstein barycenter}
-    Given a set of distributions $\mu_s$, compute a Wasserstein Frechet mean 
+    Given a set of distributions $\mu_s$, compute: 
     \begin{equation*}
         \overline{\mu} = \arg \min_{\mu} \sum_{i=1}^s \lambda_i W^p_p(\mu, \mu_i)
     \end{equation*}
-    where $\lambda_i > 0$ and $\sum_{i=1}^s \lambda_i  = 1$.\\
+    where $\lambda_i > 0$ and $\sum_{i=1}^s \lambda_i  = 1$.\vspace{1em}
+
     Generalizes the interpolation between more than 2 measures.\\
     For discrete measures $\mu = \sum_{i=1}^n a_i \delta_{x_i}$ $\Rightarrow$ we can fix the weights $a_i$ and/or the support $x_i$.
     \only<1>{\begin{figure}
@@ -703,16 +1103,18 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
 \end{frame}
 
 
-\begin{frame}{Examples}
-    See which ones make sense here:  OT spectral transport, Wasserstein Bays, VAEs.
-\end{frame}
-
 
 \section{Closing remarks}
 
 \begin{frame}{What we did not see}
-    Computational OT \\
-   multimarginal, unbalanced OT, partial OT, Gromov-Wasserstein, 
+\begin{itemize}
+    \item Computational OT
+    \item Multimarginal OT
+    \item Unbalanced OT
+    \item Partial OT
+    \item Weak OT
+    \item Particular cases with closed form
+\end{itemize}
 \end{frame}
 
 
@@ -723,6 +1125,19 @@ $$\langle\alpha, {a}\rangle + \langle\beta, \eb{b}\rangle$$
         \item Some open challenges: computational complexity, curse of dimensionality (number of samples to approximate the solutions depends is exponential with the dimension), robustify the solution with statistical guarantees (noise? outliers?), OT on different spaces than Euclidean ones, adding some extra constraints (like a temporal consistency)
     \end{itemize}
 \end{frame}
+
+\begin{frame}{Huge thanks to:}
+This tutorial handn't been possible without the infinite generosity and kindness of the following colleagues. Thank you for the discussion and the share resources! 
+    \begin{itemize}
+        \item Elsa Cazelles (IRIT)
+        \item Fernando Fêtis (UChile)
+        \item Joaquín Fontbona (UChile)
+        \item Marco Cuturi (ENSAE/Apple)
+        \item Rémi Flamary (École Polytechnique)
+    \end{itemize}
+\end{frame}
+
+
 
 
 
