@@ -127,7 +127,7 @@ How to transport a pile of sand onto a hole in an optimal way?
     \item Weighted masses
     \item Different number of sources/targets
     \item Straight path is not possible
-    \item New sample becomes available
+    \item New source/target becomes available
 \end{itemize}
 \end{minipage}
 \hfill
@@ -386,6 +386,7 @@ where $\Pi_{\mu,\nu} \langle P , C\rangle = \{  P\in {[0,1]}^{m\times n} :  \sum
 
 Recall the primal formulation: $\OT({\mu},{\nu}) = \inf _{\pi\in\Pi(\mu,\nu)} \iint c(x,y)\d\pi(x,y)$
 \begin{block}{}
+\bblue{Dual problem}
 $$\OT({\mu},{\nu}) = \sup_{(\phi,\psi)\in\Phi_c} \left(\int_{\XX} \phi d{\mu} + \int_{\XX} \psi d{\nu}\right),$$
 where
 $$\Phi_c : = \left\{(\phi,\psi)\in L_1(\mu)\times L_1(\nu),\ \mbox{s.t.}\ \phi(x) + \psi(y)\leq c(x,y)\right\}.$$
@@ -435,16 +436,16 @@ One vendor sets the following:
 \begin{itemize}
 \item[$\bullet$] There are exactly $\er{\mu_i}$ units at vineyard $\er{x_i}$ and $\eb{\nu_j}$ needed at plant $\eb{y_j}$; the vendor asks the price \bblue{(that she wants to maximize!)}
 $$\langle\alpha, \er{\mu}\rangle + \langle\beta, \eb{\nu}\rangle$$
-\visible<2-6>{\item[$\bullet$] Negative price are allowed !}
-\visible<3-6>{\item[$\bullet$] Does the vendor have a competitive offer? Her pricing scheme implies that transferring one kilo of grapes from vineyard $\er{x_i}$ to plant $\eb{y_j}$ costs exactly $\alpha_i+\beta_j$.}
-\visible<4-6>{\item[$\bullet$] \blue{Recall the primal problem:} the cost of shipping one unit from ${x_i}$ to ${y_j}$ is $C_{i,j}$.}
-\visible<5-6>{\item[$\bullet$] Feasible deal for the vendor requires that  $\alpha_i+\beta_j\leq C_{ij}$.}
-\visible<6>{\item[$\bullet$] The winery checks that the vendor proposition is a better deal by
+\visible<1-2>{\item[$\bullet$] Negative price are allowed !}
+\visible<1-2>{\item[$\bullet$] Does the vendor have a competitive offer? Her pricing scheme implies that transferring one kilo of grapes from vineyard $\er{x_i}$ to plant $\eb{y_j}$ costs exactly $\alpha_i+\beta_j$.}
+\visible<2>{\item[$\bullet$] \blue{Recall the primal problem:} the cost of shipping one unit from ${x_i}$ to ${y_j}$ is $C_{i,j}$.}
+\visible<2>{\item[$\bullet$] Feasible deal for the vendor requires that  $\alpha_i+\beta_j\leq C_{ij}$.}
+\visible<2>{\item[$\bullet$] The winery checks that the vendor proposition is a better deal by
 \begin{align*}
 \sum_{i,j} \pi_{ij}C_{ij}\geq \sum_{i,j} \pi_{ij}(\alpha_j+\beta_j) &= \left(\sum_i\alpha_i\sum_j\pi_{ij}\right) + \left(\sum_j\beta_j\sum_i\pi_{ij}\right)= \langle\alpha, \mu\rangle + \langle\beta, \nu\rangle
 \end{align*}}.
 \end{itemize}
-\visible<6>{
+\visible<2>{
     \bblue{Critically, when $c(x,y) = |x-y|$,  $\alpha = -\beta$, therefore $\OT(\mu,\nu) = \max_\alpha \langle\alpha, \mu\rangle - \langle\alpha, \nu\rangle$}
 }
 
@@ -1132,7 +1133,7 @@ where $Q$ is the quantile function of $S$. The PSD $S$ does not need to be locat
 \end{frame}
 
 \begin{frame}{Huge thanks to:}
-This tutorial handn't been possible without the infinite generosity and kindness of the following colleagues. Thank you for the discussion and the share resources! 
+This tutorial handn't been possible without the infinite generosity and kindness of the following colleagues. Thank you for the discussion and the shared resources! 
     \begin{itemize}
         \item Elsa Cazelles (IRIT)
         \item Fernando Fêtis (UChile)
