@@ -9,5 +9,5 @@ Authors:
 
 [Link to slides here](https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/slides/presentation.pdf)
 
-To replicate the Conda environment used in the experiments, use [this file](https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/slides/presentation.pdf)
+To replicate the Conda environment used in the experiments, use [this file](https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/slides/conda_environment.txt)
 
