@@ -97,11 +97,11 @@ How to transport a pile of sand onto a hole in an optimal way?
 
 
 
-\section{Part I: The Optimal Transport Problem}
+\section{Part I\\ The Optimal Transport Problem}
 
 
 \begin{frame}
-    \Large \bblue{Part I: The Optimal Transport Problem}
+    \Large \bblue{Part I\\ The Optimal Transport Problem}
 \end{frame}
 
 
@@ -436,7 +436,7 @@ One vendor sets the following:
 \begin{itemize}
 \item[$\bullet$] There are exactly $\er{\mu_i}$ units at vineyard $\er{x_i}$ and $\eb{\nu_j}$ needed at plant $\eb{y_j}$; the vendor asks the price \bblue{(that she wants to maximize!)}
 $$\langle\alpha, \er{\mu}\rangle + \langle\beta, \eb{\nu}\rangle$$
-\visible<1-2>{\item[$\bullet$] Negative price are allowed !}
+\visible<1-2>{\item[$\bullet$] Negative price are allowed!}
 \visible<1-2>{\item[$\bullet$] Does the vendor have a competitive offer? Her pricing scheme implies that transferring one kilo of grapes from vineyard $\er{x_i}$ to plant $\eb{y_j}$ costs exactly $\alpha_i+\beta_j$.}
 \visible<2>{\item[$\bullet$] \blue{Recall the primal problem:} the cost of shipping one unit from ${x_i}$ to ${y_j}$ is $C_{i,j}$.}
 \visible<2>{\item[$\bullet$] Feasible deal for the vendor requires that  $\alpha_i+\beta_j\leq C_{ij}$.}
@@ -508,16 +508,16 @@ $$\langle\alpha, \er{\mu}\rangle + \langle\beta, \eb{\nu}\rangle$$
 
 Let $\er{\mu}=\sum_{i=1}^n\delta_{x_i}$ and $\eb{\nu}=\sum_{j=1}^m\delta_{y_j}$
 \begin{block}{}
-$$\pi^\ast \in \underset{\pi\in\Pi(\er{a},\eb{b})}{\argmin} \ \langle C, \pi \rangle$$
+$$\pi^\ast \in \underset{\pi\in\Pi(\er{\mu},\eb{\nu})}{\argmin} \ \langle C, \pi \rangle$$
 \end{block}
 
-\visible<2-3>{\vspace{0.3cm}\begin{itemize}
+{\vspace{0.3cm}\begin{itemize}
 \item[$\bullet$] It's a linear problem : it can be rewritten in a vectorial form $\min_{t\geq 0} F(t) = c^Tt$
-\item[$\bullet$] It has linear constraint $\pi\mathds{1}_m =\er{a}$ and $\pi^T\mathds{1}_n=\eb{b}$
+\item[$\bullet$] It has linear constraint $\pi\mathds{1}_m =\er{\mu}$ and $\pi^T\mathds{1}_n=\eb{\nu}$
 \end{itemize}
 \vspace{0.1cm}$\Longrightarrow$ Linear problem + linear constraints ($(n+m)\times nm$ matrix) : solved in $\mathcal{O}(n^3\log(n))$ times}
 
-\visible<3>{\vspace{0.3cm}$\Longrightarrow$ Need for solvers that provide approximate solutions! See [Peyré et Cuturi 2019]}
+{\vspace{0.3cm}$\Longrightarrow$ Need for solvers that provide approximate solutions! See [Peyré et Cuturi 2019]}
 \end{frame}
 
 \begin{frame}{Regularization of OT}
@@ -535,28 +535,15 @@ $$\pi_{\varepsilon} = \argmin_{\pi\in\R^{n\times m}_+} \ \langle C,\pi\rangle + 
 
 \visible<2>{\vspace{0.2cm}Regularization terms :
 \begin{itemize}
-\item[$\bullet$] Entropic regularization \cite{sinkhorn_lightspeed}
-\item[$\bullet$] KL, Itakura Saito, $\beta$-divergences, \cite{dessein2018regularized}
+\item[$\bullet$] Entropic regularization [Cuturi, 2013]
+\item[$\bullet$] KL, Itakura Saito, $\beta$-divergences, [Papadakis \& Papadakis, 2018]
 \end{itemize}}
 
 \end{frame}
 
-\begin{frame}{Entropy regularized OT \cite{sinkhorn_lightspeed}}
-Adding regularization to the original problem turns the dual computation to an \textbf{unconstrained problem} !
-
-$$\OT(\er{\mu},\eb{\nu}) = \min_{\pi\in\Pi(a,b)} \ \langle C,\pi\rangle + \varepsilon \sum_{i,j} \pi_{ij}\log(\pi_{ij})$$
-
-The Lagrangian of the optimization problem is 
-$$\LL(\pi,\alpha,\beta) = \sum_{ij}\pi_{ij}C_{ij} + \varepsilon \pi_{ij}(\log(\pi_{ij})-1) + \alpha^T(a-\pi\mathds{1}_m) + \beta^T(b-\pi^T\mathds{1}_n)$$
-Then, by 1st order condition, we get
-$$C_{ij} +\varepsilon\log(\pi_{ij})+\alpha_i + \beta_j= 0$$
-leading to 
-$$\OT(\er{\mu},\eb{\nu}) = \max_{\alpha,\beta} \ \alpha^T\er{a} + \beta^T\eb{b} -\frac{1}{\varepsilon}\exp\left(\frac{\alpha}{\varepsilon}\right)^T \K\exp\left(\frac{\beta}{\varepsilon}\right)$$
-with $\K = \exp\left(-\frac{C}{\varepsilon}\right)$.
-\end{frame}
 
 
-\begin{frame}{Entropy regularized OT \cite{cuturi2013fast}}
+\begin{frame}{Entropy regularized OT [Cuturi, 2013]}
 \begin{block}{}
 The solution of 
 $$\OT(\er{\mu},\eb{\nu}) = \min_{\pi\in\Pi(a,b)} \ \langle C,\pi\rangle + \varepsilon \sum_{i,j} \pi_{ij}\log(\pi_{ij})$$
@@ -564,9 +551,9 @@ is of the form
 $$\pi_\varepsilon^* = \diag(u)\exp\left(-\frac{C}{\varepsilon}\right)\diag(v)$$
 \end{block}
 
-\visible<2>{\vspace{0.3cm}\begin{itemize}
-\item[$\bullet$] From Sinkhorn theorem \cite{sinkhorn1964relationship}, we get that $\diag(u)$ and $\diag(v)$ exist and are unique.
-\item[$\bullet$] Sinkhorn-Knopp algorithm \cite{knight2008sinkhorn} allows to solve it efficiently
+{\vspace{0.3cm}\begin{itemize}
+\item[$\bullet$] From Sinkhorn theorem [Sinkhorn, 1964], we get that $\diag(u)$ and $\diag(v)$ exist and are unique.
+\item[$\bullet$] Sinkhorn-Knopp algorithm [Knight, 2008] allows to solve it efficiently
 \end{itemize}}
 \end{frame}
 
@@ -575,19 +562,19 @@ $$\pi_\varepsilon^* = \diag(u)\exp\left(-\frac{C}{\varepsilon}\right)\diag(v)$$
 
 
 
-\section{Part II: The Wasserstein distance}
+\section{Part II\\ The Wasserstein distance and metric properties}
 
 
 
 \begin{frame}
-    \Large \bblue{Part II: The Wasserstein distance}
+    \Large \bblue{Part II\\ The Wasserstein distance and metric properties}
 \end{frame}
 
 
 
 
-\begin{frame}{Motivation}
-    \bred{OT defines a family of distances between measures}\\
+\begin{frame}{OT \emph{lifts} a distance from the ground}
+    \bred{A family of distances between measures}\\
     \begin{minipage}{0.59\textwidth}
         The \bblue{Kantorovitch problem}
         \begin{equation*}
@@ -622,7 +609,7 @@ $$\pi_\varepsilon^* = \diag(u)\exp\left(-\frac{C}{\varepsilon}\right)\diag(v)$$
     %We need a distance, OT provides one. Show how some \emph{strong} topologies cannot be used for learning systems
 \end{frame}
 
-\begin{frame}{The Wasserstein distance}
+\begin{frame}{The Wasserstein distance (vs others)}
     \begin{itemize}
         \item Does not need overlapping support (as KL)
         \item Determines the \emph{degree of dissimilarity} between distributions
@@ -643,9 +630,9 @@ $$\pi_\varepsilon^* = \diag(u)\exp\left(-\frac{C}{\varepsilon}\right)\diag(v)$$
 \begin{frame}{On the suitability of $W_p$ for learning}
 
 \begin{itemize}
-    \item Thus far we have referred to \emph{spaces of probability functions}, but we are interested in applying $W_p$ on spaces of \bred{generative models}.
+    \item Thus far, we have referred to \emph{spaces of probability functions}, but we are interested in applying $W_p$ on spaces of \bred{generative models}.
     \item Learning is such a space requires, more than a distance, a notion of \bred{convergence}
-    \item Consider $\mu_\text{data}$ to be the true data distribution. We want to find a model $(P_\theta)_{\theta\in\Theta}$ such that $P_\theta \to \mu_\text{data}$, or equivalently, $D(\mu_\text{data},P_\theta)\to 0$ --- for a \bblue{reasonable} distance $D$.
+    \item Consider $\mu_\text{data}$ to be the true data distribution. We want to find a model $(P_\theta)_{\theta\in\Theta}$ such that $P_\theta \to \mu_\text{data}$, or equivalently, $D(\mu_\text{data},P_\theta)\to 0$ --- for a \bblue{reasonable} divergence $D$.
 \end{itemize}
 \vspace{2em}
 \centerline{\bblue{Discussion:} Consider $\delta_{x_0}$ and $\delta_{x_i}, x_i\to x_0$}
@@ -738,7 +725,71 @@ $$\pi_\varepsilon^* = \diag(u)\exp\left(-\frac{C}{\varepsilon}\right)\diag(v)$$
 
 
 
-\begin{frame}{\red{Motivation:} Applying the Wasserstein distance to time series}
+
+\begin{frame}[plain]{The Wasserstein barycenter}
+    Given a set of distributions $\mu_s$, compute: 
+    \begin{equation*}
+        \overline{\mu} = \arg \min_{\mu} \sum_{i=1}^s \lambda_i W^p_p(\mu, \mu_i)
+    \end{equation*}
+    where $\lambda_i > 0$ and $\sum_{i=1}^s \lambda_i  = 1$.\vspace{1em}
+
+    Generalizes the interpolation between more than 2 measures.\\
+    For discrete measures $\mu = \sum_{i=1}^n a_i \delta_{x_i}$ $\Rightarrow$ we can fix the weights $a_i$ and/or the support $x_i$.
+    \only<1>{\begin{figure}
+        \centering
+            \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=0.5\textwidth]{../img/distrib_bary.pdf}
+        \end{figure}
+        }
+        \only<2>{\begin{figure}
+            \centering
+                \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=0.5\textwidth]{../img/barycenter_2d.pdf}
+            \end{figure}
+            }
+            \begin{textblock}{0.45}(0.56,0.54)
+        \bred{
+            \small
+            \underline{Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wasserstein barycenter.ipynb}{Wasserstein barycenter.ipynb}
+            }}
+            \end{textblock}
+\end{frame}
+
+\begin{frame}{The Wasserstein barycenter}
+    \bred{Example on averaging over images} \\
+    \begin{minipage}{0.48\textwidth}
+        
+    \begin{figure}
+        \centering
+            \includegraphics[clip, height=0.7\textheight]{../img/symboles_wine_L2.pdf}
+            \caption{In the \bblue{Euclidean} space }
+        \end{figure}
+        
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+\begin{figure}
+            \centering
+                \includegraphics[clip, height=0.7\textheight]{../img/symboles_wine_bary.pdf}
+            \caption{In the \bblue{Wasserstein} space}
+            \end{figure}
+            
+        \end{minipage}
+        \bred{
+            \underline{
+                Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wass bary 4 distribs.ipynb}{Wass bary 4 distribs.ipynb}
+            }}
+\end{frame}
+
+\section{Part III\\ OT for time series: The Wasserstein-Fourier distance}
+
+
+
+\begin{frame}
+    \Large \bblue{Part III\\ OT for time series: The Wasserstein-Fourier distance}
+\end{frame}
+
+
+
+\begin{frame}{Applying the Wasserstein distance to time series}
 Two cosine signals with frequencies $1$ and $3$.
 \begin{figure}
 \includegraphics[width=0.7\textwidth]{../img/cosinus.pdf}
@@ -769,7 +820,7 @@ The associated PSD functions .
 For two signals $x$ and $y$ belonging to two different classes of time series, we denote by
 \begin{itemize}
 \item[$\bullet$] $[x]$ and $[y]$ their respective class
-\item[$\bullet$] $s_x$ and $s_y$ their respective NPSD
+\item[$\bullet$] $s_x$ and $s_y$ their respective normalised PSD (NPSD)
 \end{itemize}
 We define the proposed \textit{Wasserstein-Fourier} (WF) distance:
 $$\WF{x}{y}=W_2(s_x,s_y).$$
@@ -781,7 +832,7 @@ sharing the same NPSD.
 \end{theorem}
 \vfill
 
-\noindent \tiny E. Cazelles, A. Robert \& \textbf{F. Tobar}, The Wasserstein-Fourier Distance for Stationary Time Series. \emph{IEEE Trans.~on Signal Processing} 2021
+\noindent \footnotesize E. Cazelles, A. Robert \& \textbf{F. Tobar}, The Wasserstein-Fourier Distance for Stationary Time Series. \emph{IEEE Trans.~on Signal Processing} 2021.
 
 \end{frame}
 
@@ -974,22 +1025,26 @@ Gaussian process $\leftrightarrow$ Kernel $\leftrightarrow$ PSD.
 \includegraphics[trim={0 150 0 150},clip,width=1\textwidth]{../img/sinc_gaus_sin2.pdf}
 \end{figure}
 \centering
-\bred{Our conjecture:} We can train GPs in this way\\
-\bred{Preliminary results:} For some PSD families, the cost is convex
+\bred{Spoiler:} GPs can be trained in this way at a linear cost
 \end{frame}
 
 \begin{frame}[plain]{How Gaussian proceeses are trained}
-    \noindent\red{Covariance-based metrics}: Compute sample covariance and apply, e.g., $L_p$ distances. 
+    \noindent\bred{Maximum likelihood}: Standard (very expensive) approach.\vspace{2em}
+
+
+    \noindent\bred{Covariance-based metrics}: Compute sample covariance and apply, e.g., $L_p$ distances.
+
+
     \begin{figure} 
             \centering
             %\includegraphics[width=0.8\textwidth]{figs/temporal_metric_diag.pdf}
         \end{figure}
 
-     \noindent\red{Frequency-based metrics}: Compute \textbf{Periodogram} and use any density-based metric: KL, Bergamn, Itakura-Saito, and Wasserstein. 
+     \noindent\bred{Frequency-based metrics}: Compute \textbf{Periodogram} and use any density-based metric: KL, Bergamn, Itakura-Saito, and Wasserstein. 
     
         \begin{figure} 
             \centering
-            \includegraphics[width=0.8\textwidth]{../img/spectral_metric_diag.pdf}
+            \includegraphics[width=0.9\textwidth]{../img/spectral_metric_diag.pdf}
         \end{figure}
 
 
@@ -1011,14 +1066,14 @@ For a  location-scale family with prototype $S_{0,1}$, the minimiser of $W_2(S, 
 \end{equation}
 where $Q$ is the quantile function of $S$. The PSD $S$ does not need to be location-scale.
 \end{theorem}
-\red{Corollary:} Training a GP with the Wasserstein distance has a cost $\mathcal{O}(n)$
+\bred{Corollary:} Training a GP with the Wasserstein distance has a cost $\mathcal{O}(n)$. I.e., no need of a gradient flow, as solution is exact and closed form.
 \end{frame}
 
 
 
 
 \begin{frame}[plain]{Theoretical aspects}
-    \red{Does it converge?} I.e., is it true that
+    \bred{Does it converge?} I.e., is it true that
     \begin{equation}
         \theta_n^\star = \argmin D(\hat S_n, S_\theta) \xrightarrow[n \to \infty]{a.s.} \theta^\star = \argmin D(S, S_\theta)
     \end{equation}
@@ -1061,54 +1116,6 @@ where $Q$ is the quantile function of $S$. The PSD $S$ does not need to be locat
 
 
 
-\begin{frame}{The Wasserstein barycenter}
-    Given a set of distributions $\mu_s$, compute: 
-    \begin{equation*}
-        \overline{\mu} = \arg \min_{\mu} \sum_{i=1}^s \lambda_i W^p_p(\mu, \mu_i)
-    \end{equation*}
-    where $\lambda_i > 0$ and $\sum_{i=1}^s \lambda_i  = 1$.\vspace{1em}
-
-    Generalizes the interpolation between more than 2 measures.\\
-    For discrete measures $\mu = \sum_{i=1}^n a_i \delta_{x_i}$ $\Rightarrow$ we can fix the weights $a_i$ and/or the support $x_i$.
-    \only<1>{\begin{figure}
-        \centering
-            \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=0.5\textwidth]{../img/distrib_bary.pdf}
-        \end{figure}
-        }
-        \only<2>{\begin{figure}
-            \centering
-                \includegraphics[trim={2cm 2cm 2cm 2cm},clip, width=0.5\textwidth]{../img/barycenter_2d.pdf}
-            \end{figure}
-            }
-\end{frame}
-
-\begin{frame}{The Wasserstein barycenter}
-    \bred{Example on averaging over images} \\
-    \begin{minipage}{0.48\textwidth}
-        
-    \begin{figure}
-        \centering
-            \includegraphics[clip, height=0.7\textheight]{../img/symboles_wine_L2.pdf}
-            \caption{In the \bblue{Euclidean} space }
-        \end{figure}
-        
-    \end{minipage}
-    \hfill
-    \begin{minipage}{0.48\textwidth}
-\begin{figure}
-            \centering
-                \includegraphics[clip, height=0.7\textheight]{../img/symboles_wine_bary.pdf}
-            \caption{In the \bblue{Wasserstein} space}
-            \end{figure}
-            
-        \end{minipage}
-        \bred{
-            \underline{
-                Notebook: \href{https://github.com/felipe-tobar/OT-tutorial-MLSP-2024/blob/main/Codes/Wass bary 4 distribs.ipynb}{Wass bary 4 distribs.ipynb}
-            }}
-\end{frame}
-
-
 
 \section{Closing remarks}
 
@@ -1126,14 +1133,23 @@ where $Q$ is the quantile function of $S$. The PSD $S$ does not need to be locat
 
 \begin{frame}{Conclusions \& the future}
     \begin{itemize}
-        \item OT is now on the toolkit for many fields such as signal processing, machine learning etc.
-        \item Defines a meaningful distances between distribution, with the extra information on how the particles should be moved
-        \item Some open challenges: computational complexity, curse of dimensionality (number of samples to approximate the solutions depends is exponential with the dimension), robustify the solution with statistical guarantees (noise? outliers?), OT on different spaces than Euclidean ones, adding some extra constraints (like a temporal consistency)
-    \end{itemize}
+        \itemsep1em  
+        \item OT is now in the toolkit for many fields spanning \bblue{signal processing}, \bblue{machine learning}, data science and AI.
+        \item OT defines a meaningful distance between distributions, and gives a procedure for \bblue{moving particles to minimise such distance}
+        \item Some open challenges: 
+        \begin{itemize}
+            \item computational \bblue{complexity}
+            \item \bblue{curse of dimensionality:} samples for approximations grow exponentially with the dimension
+            \item \bblue{robustness of the solution} with statistical guarantees (noise? outliers?)
+            \item OT on \bblue{different spaces} than Euclidean ones
+            \item adding some extra constraints (such as temporal consistency)
+        \end{itemize}
+        \end{itemize}
 \end{frame}
 
 \begin{frame}{Huge thanks to:}
 This tutorial handn't been possible without the infinite generosity and kindness of the following colleagues. Thank you for the discussion and the shared resources! 
+\vspace{1em}
     \begin{itemize}
         \item Elsa Cazelles (IRIT)
         \item Fernando Fêtis (UChile)
